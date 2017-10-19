@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <Company />
+    <Authors>Johannes Tegnér</Authors>
+    <Description>Verify Swedish social security numbers.</Description>
+    <PackageLicenseUrl>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/personnummer/csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/personnummer/csharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Validation, Social security numbers, Swedish, Sweden, Verify</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>CsharpSignKey.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+</Project>
