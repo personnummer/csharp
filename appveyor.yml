@@ -1,0 +1,22 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform:
+- x86
+- x64
+- ARM
+clone_depth: 1
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+nuget:
+  disable_publish_on_pr: true
+build:
+  publish_nuget: true
+  verbosity: minimal
+test:
+  assemblies:
+    only:
+    - Personnummer.Tests
