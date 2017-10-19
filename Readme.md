@@ -1,6 +1,7 @@
 # Personnummer
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4gg2pecaek9garpt/branch/master?svg=true)](https://ci.appveyor.com/project/Johannestegner/csharp/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/ajkcx0gg8rke8hx2?svg=true
+)](https://ci.appveyor.com/project/frozzare/csharp/branch/master)
 
 Validate Swedish social security numbers.
 
