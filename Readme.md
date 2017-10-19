@@ -6,7 +6,7 @@ Validate Swedish social security numbers.
 
 ## Example
 
-```
+```csharp
 use Personnummer;
 
 class Test 
@@ -14,7 +14,7 @@ class Test
   public void TestValidation() 
   {
     Personnummer.Valid(6403273813); 	// => True
-	Personnummer.Valid('19130401+2931') // => True
+    Personnummer.Valid('19130401+2931') // => True
   }
 }
 ```
