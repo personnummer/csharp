@@ -5,6 +5,12 @@
 
 Validate Swedish social security numbers.
 
+## Installation
+
+```
+dotnet add package Personnummer --version 1.0.0
+```
+
 ## Example
 
 ```csharp
