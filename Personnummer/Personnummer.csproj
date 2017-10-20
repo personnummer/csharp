@@ -11,10 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Validation, Social security numbers, Swedish, Sweden, Verify</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>CsharpSignKey.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
