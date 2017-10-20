@@ -1,12 +1,20 @@
 version: 1.0.{build}
 image: Visual Studio 2017
-configuration: Release
+platform: Any CPU
+configuration: 
+- Debug
+- Release
 clone_depth: 1
 nuget:
   disable_publish_on_pr: true
 before_build:
-- cmd: nuget restore
-build:
-  project: Personnummer.sln
-  publish_nuget: true
-  verbosity: minimal
+- dotnet restore
+build_script:
+- dotnet build
+after_build:
+- dotnet publish "Personnummer\Personnummer.csproj" -c %CONFIGURATION% -o artifacts\%CONFIGURATION%
+test_script:
+- cd Personnummer.Tests
+- dotnet xunit
+artifacts:
+- path: artifacts\**\*.*
