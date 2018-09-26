@@ -23,34 +23,7 @@ namespace Personnummer
         /// </summary>
         /// <param name="value">Sequense of digits as a string.</param>
         /// <returns>Resulting checksum value.</returns>
-        private static int Luhn(string value)
-        {
-            // Luhm algorithm doubles every other number in the value.
-            // To get the correct checksum digit we aught to append a 0 on the sequence.
-            // If the result becomes a two digit number, subtract 9 from the value.
-            // If the total sum is not a 0, the last checksum value should be subtracted from 10.
-            // The resulting value is the check value that we use as control number.
-            
-            char[] t = (value + "0").ToCharArray();
-            int sum = 0;
-            int temp;
-            // The checksum should be checked backwards.
-            for (int i = t.Length; i -->0; )
-            {
-                // The value should not be used as an int right away
-                // (because it is a char which is a number. We need to subtract the '0' value (48) from it too.
-                temp = t[i] - 48;
-                // Depending on i%2 (if even or odd) we either add or double.
-                sum += (i % 2 == 0) ? ((temp *= 2) > 9 ? temp - 9 : temp) : temp;
-            }
-
-            if (sum != 0)
-            {
-                sum = 10 - (sum % 10);
-            }
-            
-            return sum;
-        }
+       
 
         /// <summary>
         /// Function to make sure that the passed year, month and day is parseable to a date.
@@ -102,7 +75,7 @@ namespace Personnummer
                 return false;
             }
 
-            bool valid = Luhn(yStr + groups[3].Value + groups[4].Value + groups[6].Value) == check;
+            bool valid = Luhn.LuhnCheck(yStr + groups[3].Value + groups[4].Value + groups[6].Value + groups[7].Value) ;
             return valid && (TestDate(yStr, month, day) || TestDate(yStr, month, day - 60));
         }
 
