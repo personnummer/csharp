@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Personnummer
@@ -31,25 +32,19 @@ namespace Personnummer
             // If the total sum is not a 0, the last checksum value should be subtracted from 10.
             // The resulting value is the check value that we use as control number.
             
-            char[] t = (value + "0").ToCharArray();
+            // The value passed is a string, so we aught to get the actual integer value from each char (i.e., subtract '0' which is 48).
+            int[] t = value.ToCharArray().Select(d => d - 48).ToArray();
             int sum = 0;
             int temp;
-            // The checksum should be checked backwards.
             for (int i = t.Length; i -->0; )
             {
-                // The value should not be used as an int right away
-                // (because it is a char which is a number. We need to subtract the '0' value (48) from it too.
-                temp = t[i] - 48;
-                // Depending on i%2 (if even or odd) we either add or double.
-                sum += (i % 2 == 0) ? ((temp *= 2) > 9 ? temp - 9 : temp) : temp;
+                temp = t[i];
+                sum += (i % 2 == t.Length % 2) 
+                    ? ((temp * 2) % 10) + temp / 5 
+                    : temp;
             }
 
-            if (sum != 0)
-            {
-                sum = 10 - (sum % 10);
-            }
-            
-            return sum;
+            return sum % 10;
         }
 
         /// <summary>
@@ -102,7 +97,7 @@ namespace Personnummer
                 return false;
             }
 
-            bool valid = Luhn(yStr + groups[3].Value + groups[4].Value + groups[6].Value) == check;
+            bool valid = Luhn($"{yStr}{groups[3].Value}{groups[4].Value}{groups[6].Value}{check}") == 0;
             return valid && (TestDate(yStr, month, day) || TestDate(yStr, month, day - 60));
         }
 

@@ -18,6 +18,7 @@ namespace Personnummer.Tests
         [InlineData("510818-916", false)]
         [InlineData("19900101-001", false)]
         [InlineData("100101+001", false)]
+        [InlineData("550207-3900", true)]
         public void TestPersonnummerString(string value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
@@ -32,6 +33,7 @@ namespace Personnummer.Tests
         [InlineData(510818916, false)]
         [InlineData(19900101001, false)]
         [InlineData(100101001, false)]
+        [InlineData(5502073900, true)]
         public void TestPersonnummerInt(long value, bool expected)
         {
             
@@ -43,6 +45,7 @@ namespace Personnummer.Tests
         [InlineData("640883-3231", true)]
         [InlineData("900161-0017", false)]
         [InlineData("640893-3231", false)]
+        [InlineData("550207-3900", true)]
         public void TexstCoOrdinationNumbersString(string value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
@@ -53,6 +56,7 @@ namespace Personnummer.Tests
         [InlineData(6408833231, true)]
         [InlineData(9001610017, false)]
         [InlineData(6408933231, false)]
+        [InlineData(5502073900, true)]
         public void TexstCoOrdinationNumbersInt(long value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
