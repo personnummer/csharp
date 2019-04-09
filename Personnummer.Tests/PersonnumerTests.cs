@@ -19,6 +19,7 @@ namespace Personnummer.Tests
         [InlineData("19900101-001", false)]
         [InlineData("100101+001", false)]
         [InlineData("550207-3900", true)]
+        [InlineData("9701063-2391", false)]
         public void TestPersonnummerString(string value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
