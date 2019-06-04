@@ -42,7 +42,7 @@ namespace Personnummer
             // If the result becomes a two digit number, subtract 9 from the value.
             // If the total sum is not a 0, the last checksum value should be subtracted from 10.
             // The resulting value is the check value that we use as control number.
-            
+
             // The value passed is a string, so we aught to get the actual integer value from each char (i.e., subtract '0' which is 48).
             int[] t = value.ToCharArray().Select(d => d - 48).ToArray();
             int sum = 0;
@@ -50,14 +50,14 @@ namespace Personnummer
             for (int i = t.Length; i -->0; )
             {
                 temp = t[i];
-                sum += (i % 2 == t.Length % 2) 
-                    ? ((temp * 2) % 10) + temp / 5 
+                sum += (i % 2 == t.Length % 2)
+                    ? ((temp * 2) % 10) + temp / 5
                     : temp;
             }
 
             return sum % 10;
         }
-        
+
         /// <summary>
         /// Parse a social security number into a ParsedPersonnummer structure.
         /// </summary>
@@ -124,33 +124,57 @@ namespace Personnummer
         }
 
         /// <summary>
-        /// Validate Swedish social security number.
+        /// Validate Swedish social security number using a string value type
         /// </summary>
+        /// <remarks>
+        /// The accepted input formats are:
+        ///
+        /// YYYYMMDDXXXX
+        /// YYMMDDXXXX
+        /// YYYYMMDD-XXXX
+        /// YYYYMMDD+XXXX
+        /// YYMMDD-XXXX
+        /// YYMMDD+XXXX
+        /// </remarks>
         /// <param name="value">Value as string.</param>
+        /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(string value) => Valid(Parse(value));
+        public static bool Valid(string value, bool includeCoordinationNumber) => Valid(Parse(value), includeCoordinationNumber);
 
         /// <summary>
-        /// Validate Swedish social security number.
+        /// Validate Swedish social security number using a Int64/Long value type.
         /// </summary>
-        /// <param name="value">Value as long.</param>
+        /// <remarks>
+        /// The accepted input formats are:
+        ///
+        /// YYYYMMDDXXXX
+        /// </remarks>
+        /// <param name="value">Social security number as Int64/Long.</param>
+        /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(long value) => Valid(value.ToString());
+        public static bool Valid(long value, bool includeCoordinationNumber) => Valid(value.ToString(), includeCoordinationNumber);
 
         /// <summary>
         /// Validated a parsed social security number.
         /// </summary>
         /// <param name="parsed">Parsed value to validate.</param>
+        /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns></returns>
-        private static bool Valid(ParsedPersonnummer parsed)
+        private static bool Valid(ParsedPersonnummer parsed, bool includeCoordinationNumber)
         {
             if (!parsed.Parsed)
             {
                 return false;
             }
 
-            bool valid = Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") == 0;
-            return valid && (TestDate(parsed.Century, parsed.Decade, parsed.Month, parsed.Day) || TestDate(parsed.Century, parsed.Decade, parsed.Month, (int.Parse(parsed.Day) - 60).ToString()));
+            bool valid = TestDate(parsed.Century, parsed.Decade, parsed.Month, parsed.Day);
+            if (!valid && includeCoordinationNumber)
+            {
+                TestDate(parsed.Century, parsed.Decade, parsed.Month, (int.Parse(parsed.Day) - 60).ToString());
+            }
+
+            return valid && Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") == 0;
+
         }
 
         /// <summary>
@@ -199,6 +223,5 @@ namespace Personnummer
 
             return long.Parse($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}");
         }
-
     }
 }
