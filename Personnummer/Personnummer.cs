@@ -109,7 +109,7 @@ namespace Personnummer
             }
 
             bool valid = TestDate(yStr, month, day);
-            if (includeCoordinationNumber)
+            if (!valid && includeCoordinationNumber)
             {
                 valid = TestDate(yStr, month, day - 60);
             }

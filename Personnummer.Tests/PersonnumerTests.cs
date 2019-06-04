@@ -37,7 +37,6 @@ namespace Personnummer.Tests
         [InlineData(5502073900, true)]
         public void TestPersonnummerInt(long value, bool expected)
         {
-            
             Assert.Equal(Personnummer.Valid(value), expected);
         }
         
