@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Company />
-    <Authors>Johannes Tegnér</Authors>
+    <Company>personnummer</Company>
+    <Authors>Johannes Tegnér, Fredrik Forsmo</Authors>
     <Description>Verify Swedish social security numbers.</Description>
     <PackageLicenseUrl>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/personnummer/csharp</PackageProjectUrl>
@@ -11,7 +11,11 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Validation, Social security numbers, Swedish, Sweden, Verify</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageLicense>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicense>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
