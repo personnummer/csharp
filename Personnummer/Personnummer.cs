@@ -61,15 +61,16 @@ namespace Personnummer
         /// <summary>
         /// Function to make sure that the passed year, month and day is parseable to a date.
         /// </summary>
-        /// <param name="year">Years as string.</param>
+        /// <param name="century">Century as string.</param>
+        /// <param name="decade">Decade as string.</param>
         /// <param name="month">Month as string.</param>
         /// <param name="day">Day as string.</param>
         /// <returns>Result.</returns>
-        private static bool TestDate(string year, string month, string day)
+        private static bool TestDate(string century, string decade, string month, string day)
         {
             try
             {
-                DateTime dt = new DateTime(cultureInfo.Calendar.ToFourDigitYear(int.Parse(year)), int.Parse(month), int.Parse(day));
+                DateTime dt = new DateTime( int.Parse($"{century}{decade}"), int.Parse(month), int.Parse(day));
                 return true;
             }
             catch
@@ -96,7 +97,7 @@ namespace Personnummer
             }
 
             bool valid = Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") == 0;
-            return valid && (TestDate(parsed.decade, parsed.month, parsed.day) || TestDate(parsed.day, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
+            return valid && (TestDate(parsed.century, parsed.decade, parsed.month, parsed.day) || TestDate(parsed.century, parsed.decade, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
         }
 
         private static ParsedPersonnummer Parse(string value)
@@ -117,18 +118,18 @@ namespace Personnummer
                 // 2: else check if group[5] is set, if it is, subtract decade from the current year and depending on + or -, subtract 0 or 100 more.
                 // 3: If none of the above, get closes century match.
 
-                string century = String.Empty;
-                string decade = groups[2].Value;
+                string century = string.Empty;
+                string decade = groups[2].Value.Substring(groups[2].Value.Length - 2);
 
                 // Check-age
                
-                if (!String.IsNullOrEmpty(groups[1].Value))
+                if (!string.IsNullOrEmpty(groups[1].Value))
                 {
-                    century = groups[1].Value;
+                    century = groups[1].Value.Substring(0, 2);
                 }
                 else
                 {
-                    int born = DateTime.Now.Year - Int32.Parse(decade);
+                    int born = DateTime.Now.Year - int.Parse(decade);
                     if (groups[5].Value.Length != 0 && groups[5].Value == "+")
                     {
                         born -= 100;
@@ -173,7 +174,7 @@ namespace Personnummer
         public static string Format(long value, bool withCentury = false)
         {
             ParsedPersonnummer parsed = Parse(value.ToString());
-            if (!parsed.Parsed)
+            if (!parsed.Parsed ||  Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") != 0)
             {
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
@@ -183,7 +184,7 @@ namespace Personnummer
                 return $"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}";
             }
 
-            char sign = ((DateTime.Now.Year - Int32.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
+            char sign = ((DateTime.Now.Year - int.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
             return $"{parsed.decade}{parsed.month}{parsed.day}{sign}{parsed.digits}";
         }
 
@@ -197,18 +198,18 @@ namespace Personnummer
         public static long Format(string value, bool withCentury = false)
         {
             ParsedPersonnummer parsed = Parse(value);
-            if (!parsed.Parsed)
+            if (!parsed.Parsed || Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") != 0)
             {
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
 
             if (withCentury)
             {
-                return Int64.Parse($"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
+                return long.Parse($"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
             }
 
-            char sign = ((DateTime.Now.Year - Int32.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
-            return Int64.Parse($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
+            char sign = ((DateTime.Now.Year - int.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
+            return long.Parse($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
         }
 
     }

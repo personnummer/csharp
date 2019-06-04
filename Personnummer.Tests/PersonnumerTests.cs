@@ -64,10 +64,11 @@ namespace Personnummer.Tests
         }
 
         [Theory]
-        [InlineData("101063+2391", 1010632391)]
+        [InlineData("130401+2931", 1304012931)]
         [InlineData("701063-2391", 7010632391)]
         [InlineData("640883-3231", 6408833231)]
         [InlineData("550207-3900", 5502073900)]
+        [InlineData("6408833231", 6408833231)]
         public void TestParseStringWithoutCentury(string value, long expected)
         {
             Assert.Equal(Personnummer.Format(value), expected);
@@ -77,6 +78,9 @@ namespace Personnummer.Tests
         [InlineData("187010632391", 187010632391)]
         [InlineData("197010632391", 197010632391)]
         [InlineData("196408833231", 196408833231)]
+        [InlineData("6408833231", 196408833231)]
+        [InlineData("0001010107", 200001010107)]
+        [InlineData("000101-0107", 200001010107)]
         [InlineData("195502073900", 195502073900)]
         public void TestParseStringWithCentury(string value, long expected)
         {
@@ -85,7 +89,7 @@ namespace Personnummer.Tests
 
 
         [Theory]
-        [InlineData(191010632391, "101063+2391")]
+        [InlineData(191304012931, "130401+2931")]
         [InlineData(7010632391, "701063-2391")]
         [InlineData(6408833231, "640883-3231")]
         [InlineData(5502073900, "550207-3900")]
