@@ -68,11 +68,22 @@ namespace Personnummer
         }
 
         /// <summary>
-        /// Validate Swedish social security number.
+        /// Validate Swedish social security number using a string value type
         /// </summary>
+        /// <remarks>
+        /// The accepted input formats are:
+        ///
+        /// YYYYMMDDXXXX
+        /// YYMMDDXXXX
+        /// YYYYMMDD-XXXX
+        /// YYYYMMDD+XXXX
+        /// YYMMDD-XXXX
+        /// YYMMDD+XXXX
+        /// </remarks>
         /// <param name="value">Value as string.</param>
+        /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(string value)
+        public static bool Valid(string value, bool includeCoordinationNumber = true)
         {
             MatchCollection matches = regex.Matches(value);
 
@@ -97,19 +108,29 @@ namespace Personnummer
                 return false;
             }
 
-            bool valid = Luhn($"{yStr}{groups[3].Value}{groups[4].Value}{groups[6].Value}{check}") == 0;
-            return valid && (TestDate(yStr, month, day) || TestDate(yStr, month, day - 60));
+            bool valid = TestDate(yStr, month, day);
+            if (!valid && includeCoordinationNumber)
+            {
+                valid = TestDate(yStr, month, day - 60);
+            }
+
+            return valid && Luhn($"{yStr}{groups[3].Value}{groups[4].Value}{groups[6].Value}{check}") == 0;
         }
 
         /// <summary>
-        /// Validate Swedish social security number.
+        /// Validate Swedish social security number using a Int64/Long value type.
         /// </summary>
-        /// <param name="value">Value as long.</param>
+        /// <remarks>
+        /// The accepted input formats are:
+        /// 
+        /// YYYYMMDDXXXX
+        /// </remarks>
+        /// <param name="value">Social security number as Int64/Long.</param>
+        /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(long value)
+        public static bool Valid(long value, bool includeCoordinationNumber = true)
         {
-            return Valid(value.ToString());
+            return Valid(value.ToString(), includeCoordinationNumber);
         }
-
     }
 }
