@@ -10,6 +10,24 @@ namespace Personnummer
     /// </summary>
     public static class Personnummer
     {
+        private struct ParsedPersonnummer
+        {
+            public string decade;
+            public string month;
+            public string day;
+            public string digits;
+
+            public int Decade => Int32.Parse(decade);
+
+            public int Month => Int32.Parse(month);
+
+            public int Day => Int32.Parse(day);
+            
+            public string Check => digits.Substring(3, 1);
+
+            public bool Parsed => !string.IsNullOrEmpty(digits);
+        }
+
         private static readonly Regex regex;
         private static readonly CultureInfo cultureInfo;
 
@@ -51,14 +69,14 @@ namespace Personnummer
         /// Function to make sure that the passed year, month and day is parseable to a date.
         /// </summary>
         /// <param name="year">Years as string.</param>
-        /// <param name="month">Month as int.</param>
-        /// <param name="day">Day as int.</param>
+        /// <param name="month">Month as string.</param>
+        /// <param name="day">Day as string.</param>
         /// <returns>Result.</returns>
-        private static bool TestDate(string year, int month, int day)
+        private static bool TestDate(string year, string month, string day)
         {
             try
             {
-                DateTime dt = new DateTime(cultureInfo.Calendar.ToFourDigitYear(int.Parse(year)), month, day);
+                DateTime dt = new DateTime(cultureInfo.Calendar.ToFourDigitYear(int.Parse(year)), int.Parse(month), int.Parse(day));
                 return true;
             }
             catch
@@ -74,31 +92,45 @@ namespace Personnummer
         /// <returns>Result.</returns>
         public static bool Valid(string value)
         {
+            ParsedPersonnummer parsed = Parse(value);
+
+            if (!parsed.Parsed)
+            {
+                return false;
+            }
+
+
+            bool valid = Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") == 0;
+            return valid && (TestDate(parsed.decade, parsed.month, parsed.day) || TestDate(parsed.day, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
+        }
+
+
+        private static ParsedPersonnummer Parse(string value)
+        {
             MatchCollection matches = regex.Matches(value);
 
             if (matches.Count < 1 || matches[0].Groups.Count < 7)
             {
-                return false;
+                return new ParsedPersonnummer();
             }
 
             GroupCollection groups = matches[0].Groups;
-            int month, day, check;
-            string yStr;
+
             try
             {
-                yStr  = (groups[2].Value.Length == 4) ? groups[2].Value.Substring(2) : groups[2].Value;
-                month = int.Parse(groups[3].Value);
-                day   = int.Parse(groups[4].Value);
-                check = int.Parse(groups[7].Value);
+                return new ParsedPersonnummer()
+                {
+                    decade = (groups[2].Value.Length == 4) ? groups[2].Value.Substring(2) : groups[2].Value,
+                    month  = groups[3].Value,
+                    day    = groups[4].Value,
+                    digits = $"{groups[6]}{groups[7]}"
+                };
             }
             catch
             {
                 // Could not parse. So invalid.
-                return false;
+                return new ParsedPersonnummer();
             }
-
-            bool valid = Luhn($"{yStr}{groups[3].Value}{groups[4].Value}{groups[6].Value}{check}") == 0;
-            return valid && (TestDate(yStr, month, day) || TestDate(yStr, month, day - 60));
         }
 
         /// <summary>
@@ -110,6 +142,5 @@ namespace Personnummer
         {
             return Valid(value.ToString());
         }
-
     }
 }
