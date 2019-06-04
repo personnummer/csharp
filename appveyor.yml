@@ -2,22 +2,46 @@ version: 1.0.{build}
 image: Visual Studio 2017
 platform: Any CPU
 configuration: 
-- Debug
-- Release
+  - Debug
+  - Release
 clone_depth: 1
+shallow_clone: true 
 before_build:
-- dotnet restore
+  - dotnet restore
 build_script:
-- dotnet build
+  - dotnet build
 test_script:
-- dotnet test Personnummer.Tests
+  - dotnet test Personnummer.Tests
+
+# Only publish if on master branch and not a PR.
+after_test:
+  - |
+    if [[ $APPVEYOR_REPO_BRANCH -eq 'master' ]] && [[ ! -z $APPVEYOR_PULL_REQUEST_NUMBER ]]; then
+        dotnet publish "Personnummer\Personnummer.csproj" -c Release -o artifacts\    
+    fi
 
 for:
-- branches:
-    only:
-     - master
-  configuration: Release
-  after_test:
-  - dotnet publish "Personnummer\Personnummer.csproj" -c %CONFIGURATION% -o artifacts\%CONFIGURATION%                
-  artifacts:
-  - path: artifacts\**\*.*
+  - branches:
+      only:
+        - master
+    configuration: Release
+    after_test:
+      - dotnet publish "Personnummer\Personnummer.csproj" -c Release -o artifacts\                
+    artifacts:
+      - path: artifacts\*.*
+    dotnet_csproj:
+      patch: true
+      file: '**\*.csproj'
+      version: '{APPVEYOR_REPO_TAG}'
+      package_version: '{APPVEYOR_REPO_TAG}'
+      assembly_version: '{APPVEYOR_REPO_TAG}'
+      file_version: '{APPVEYOR_REPO_TAG}'
+      informational_version: '{APPVEYOR_REPO_TAG}'
+      
+    #deploy:
+    #  - provider: GitHub
+    #    artifact: artifacts\/.*\.nupkg/
+    #    draft: false
+    #    prerelease: false
+    #    on:
+    #      APPVEYOR_REPO_TAG: true
