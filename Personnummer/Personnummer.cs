@@ -12,18 +12,11 @@ namespace Personnummer
     {
         private struct ParsedPersonnummer
         {
+            public string century;
             public string decade;
             public string month;
             public string day;
             public string digits;
-
-            public int Decade => Int32.Parse(decade);
-
-            public int Month => Int32.Parse(month);
-
-            public int Day => Int32.Parse(day);
-            
-            public string Check => digits.Substring(3, 1);
 
             public bool Parsed => !string.IsNullOrEmpty(digits);
         }
@@ -119,12 +112,38 @@ namespace Personnummer
 
             try
             {
+                // To get century we have to check multiple things.
+                // 1: Is the group[1] value more than 0 chars long? If so, we have it right away.
+                // 2: else check if group[5] is set, if it is, subtract decade from the current year and depending on + or -, subtract 0 or 100 more.
+                // 3: If none of the above, get closes century match.
+
+                string century = String.Empty;
+                string decade = groups[2].Value;
+
+                // Check-age
+               
+                if (!String.IsNullOrEmpty(groups[1].Value))
+                {
+                    century = groups[1].Value;
+                }
+                else
+                {
+                    int born = DateTime.Now.Year - Int32.Parse(decade);
+                    if (groups[5].Value.Length != 0 && groups[5].Value == "+")
+                    {
+                        born -= 100;
+                    }
+
+                    century = born.ToString().Substring(0, 2);
+                }
+
                 return new ParsedPersonnummer()
                 {
-                    decade = (groups[2].Value.Length == 4) ? groups[2].Value.Substring(2) : groups[2].Value,
-                    month  = groups[3].Value,
-                    day    = groups[4].Value,
-                    digits = $"{groups[6]}{groups[7]}"
+                    century = century,
+                    decade  = decade,
+                    month   = groups[3].Value,
+                    day     = groups[4].Value,
+                    digits  = $"{groups[6]}{groups[7]}"
                 };
             }
             catch
@@ -159,7 +178,13 @@ namespace Personnummer
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
 
-            return "";
+            if (withCentury)
+            {
+                return $"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}";
+            }
+
+            char sign = ((DateTime.Now.Year - Int32.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
+            return $"{parsed.decade}{parsed.month}{parsed.day}{sign}{parsed.digits}";
         }
 
         /// <summary>
@@ -177,7 +202,13 @@ namespace Personnummer
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
 
-            return 0;
+            if (withCentury)
+            {
+                return Int64.Parse($"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
+            }
+
+            char sign = ((DateTime.Now.Year - Int32.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
+            return Int64.Parse($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
         }
 
     }
