@@ -119,13 +119,13 @@ namespace Personnummer
                 // 3: If none of the above, get closes century match.
 
                 string century = string.Empty;
-                string decade = groups[2].Value.Substring(groups[2].Value.Length - 2);
+                string decade = groups[2].Value;
 
                 // Check-age
                
                 if (!string.IsNullOrEmpty(groups[1].Value))
                 {
-                    century = groups[1].Value.Substring(0, 2);
+                    century = groups[1].Value;
                 }
                 else
                 {
