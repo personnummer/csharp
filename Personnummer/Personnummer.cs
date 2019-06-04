@@ -12,13 +12,13 @@ namespace Personnummer
     {
         private struct ParsedPersonnummer
         {
-            public string century;
-            public string decade;
-            public string month;
-            public string day;
-            public string digits;
+            public string Century;
+            public string Decade;
+            public string Month;
+            public string Day;
+            public string Digits;
 
-            public bool Parsed => !string.IsNullOrEmpty(digits);
+            public bool Parsed => !string.IsNullOrEmpty(Digits);
         }
 
         private static readonly Regex regex;
@@ -26,14 +26,14 @@ namespace Personnummer
 
         static Personnummer()
         {
-            cultureInfo = new CultureInfo("sv-SE");
+            cultureInfo = CultureInfo.CreateSpecificCulture("sv-SE");
             regex       = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([-|+]{0,1})?(\d{3})(\d{0,1})$");
         }
 
         /// <summary>
         /// Calculates the checksum value of a given digit-sequence as string by using the luhn/mod10 algorithm.
         /// </summary>
-        /// <param name="value">Sequense of digits as a string.</param>
+        /// <param name="value">Sequence of digits as a string.</param>
         /// <returns>Resulting checksum value.</returns>
         private static int Luhn(string value)
         {
@@ -93,11 +93,11 @@ namespace Personnummer
 
             return new ParsedPersonnummer()
             {
-                century = century,
-                decade = decade,
-                month = groups[3].Value,
-                day = groups[4].Value,
-                digits = $"{groups[6]}{groups[7]}"
+                Century = century,
+                Decade = decade,
+                Month = groups[3].Value,
+                Day = groups[4].Value,
+                Digits = $"{groups[6]}{groups[7]}"
             };
 
         }
@@ -112,15 +112,7 @@ namespace Personnummer
         /// <returns>Result.</returns>
         private static bool TestDate(string century, string decade, string month, string day)
         {
-            try
-            {
-                DateTime dt = new DateTime( int.Parse($"{century}{decade}"), int.Parse(month), int.Parse(day));
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return DateTime.TryParse($"{century}{decade}/{month}/{day}", cultureInfo, DateTimeStyles.None, out _);
         }
 
         /// <summary>
@@ -149,8 +141,8 @@ namespace Personnummer
                 return false;
             }
 
-            bool valid = Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") == 0;
-            return valid && (TestDate(parsed.century, parsed.decade, parsed.month, parsed.day) || TestDate(parsed.century, parsed.decade, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
+            bool valid = Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") == 0;
+            return valid && (TestDate(parsed.Century, parsed.Decade, parsed.Month, parsed.Day) || TestDate(parsed.Century, parsed.Decade, parsed.Month, (int.Parse(parsed.Day) - 60).ToString()));
         }
 
         /// <summary>
@@ -163,18 +155,18 @@ namespace Personnummer
         public static string Format(long value, bool withCentury = false)
         {
             ParsedPersonnummer parsed = Parse(value.ToString());
-            if (!parsed.Parsed ||  Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") != 0)
+            if (!parsed.Parsed ||  Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") != 0)
             {
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
 
             if (withCentury)
             {
-                return $"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}";
+                return $"{parsed.Century}{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}";
             }
 
-            char sign = ((DateTime.Now.Year - int.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
-            return $"{parsed.decade}{parsed.month}{parsed.day}{sign}{parsed.digits}";
+            char sign = ((DateTime.Now.Year - int.Parse(parsed.Century + parsed.Decade)) >= 100) ? '+' : '-';
+            return $"{parsed.Decade}{parsed.Month}{parsed.Day}{sign}{parsed.Digits}";
         }
 
         /// <summary>
@@ -187,18 +179,17 @@ namespace Personnummer
         public static long Format(string value, bool withCentury = false)
         {
             ParsedPersonnummer parsed = Parse(value);
-            if (!parsed.Parsed || Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") != 0)
+            if (!parsed.Parsed || Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") != 0)
             {
                 throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
             }
 
             if (withCentury)
             {
-                return long.Parse($"{parsed.century}{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
+                return long.Parse($"{parsed.Century}{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}");
             }
 
-            char sign = ((DateTime.Now.Year - int.Parse(parsed.century + parsed.decade)) >= 100) ? '+' : '-';
-            return long.Parse($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}");
+            return long.Parse($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}");
         }
 
     }

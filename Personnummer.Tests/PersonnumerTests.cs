@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -106,6 +107,16 @@ namespace Personnummer.Tests
         public void TestParseLongWithCentury(long value, string expected)
         {
             Assert.Equal(Personnummer.Format(value, true), expected);
+        }
+
+        [Theory]
+        [InlineData("dfsafdsadfs")]
+        [InlineData(6408933231)]
+        [InlineData('a')]
+        [InlineData(123123)]
+        public void TestParseInvalidThrows(dynamic value)
+        {
+            Assert.Throws<ValidationException>(() => Personnummer.Format(value));
         }
 
     }
