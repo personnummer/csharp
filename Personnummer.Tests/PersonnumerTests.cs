@@ -54,7 +54,7 @@ namespace Personnummer.Tests
         [InlineData("6102202425", false)]
         [InlineData("890302-4529", false)]
         [InlineData("890362-4528", false)]
-        public void TexstCoOrdinationNumbersString(string value, bool expected)
+        public void TestCoOrdinationNumbersString(string value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
         }
@@ -65,7 +65,7 @@ namespace Personnummer.Tests
         [InlineData(9001610017, false)]
         [InlineData(6408933231, false)]
         [InlineData(5502073900, true)]
-        public void TexstCoOrdinationNumbersInt(long value, bool expected)
+        public void TestCoOrdinationNumbersInt(long value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
         }
@@ -119,6 +119,7 @@ namespace Personnummer.Tests
         [InlineData("dfsafdsadfs")]
         [InlineData(6408933231)]
         [InlineData('a')]
+        [InlineData(null)]
         [InlineData(123123)]
         public void TestParseInvalidThrows(dynamic value)
         {

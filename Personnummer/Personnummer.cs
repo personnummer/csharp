@@ -81,7 +81,7 @@ namespace Personnummer
             }
 
             GroupCollection groups = matches[0].Groups;
-            string century = string.Empty;
+            string century;
             string decade = groups[2].Value;
 
             if (!string.IsNullOrEmpty(groups[1].Value))
@@ -139,7 +139,7 @@ namespace Personnummer
         /// <param name="value">Value as string.</param>
         /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(string value, bool includeCoordinationNumber) => Valid(Parse(value), includeCoordinationNumber);
+        public static bool Valid(string value, bool includeCoordinationNumber = true) => Valid(Parse(value), includeCoordinationNumber);
 
         /// <summary>
         /// Validate Swedish social security number using a Int64/Long value type.
@@ -152,7 +152,7 @@ namespace Personnummer
         /// <param name="value">Social security number as Int64/Long.</param>
         /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(long value, bool includeCoordinationNumber) => Valid(value.ToString(), includeCoordinationNumber);
+        public static bool Valid(long value, bool includeCoordinationNumber = true) => Valid(value.ToString(), includeCoordinationNumber);
 
         /// <summary>
         /// Validated a parsed social security number.
@@ -160,7 +160,7 @@ namespace Personnummer
         /// <param name="parsed">Parsed value to validate.</param>
         /// <param name="includeCoordinationNumber">If set to false, the method will return false if the value is a valid coordination number but not a social security number.</param>
         /// <returns></returns>
-        private static bool Valid(ParsedPersonnummer parsed, bool includeCoordinationNumber)
+        private static bool Valid(ParsedPersonnummer parsed, bool includeCoordinationNumber = true)
         {
             if (!parsed.Parsed)
             {
@@ -170,7 +170,7 @@ namespace Personnummer
             bool valid = TestDate(parsed.Century, parsed.Decade, parsed.Month, parsed.Day);
             if (!valid && includeCoordinationNumber)
             {
-                TestDate(parsed.Century, parsed.Decade, parsed.Month, (int.Parse(parsed.Day) - 60).ToString());
+                valid = TestDate(parsed.Century, parsed.Decade, parsed.Month, (int.Parse(parsed.Day) - 60).ToString());
             }
 
             return valid && Luhn($"{parsed.Decade}{parsed.Month}{parsed.Day}{parsed.Digits}") == 0;
