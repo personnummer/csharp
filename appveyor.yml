@@ -9,7 +9,13 @@ shallow_clone: true
 before_build:
   - dotnet restore
 build_script:
-  - dotnet build
+  - |
+    if [[ -z $APPVEYOR_REPO_TAG ]]; then
+        dotnet build  
+    else
+        dotnet build /p:Version=${APPVEYOR_REPO_TAG}
+    fi
+  
 test_script:
   - dotnet test Personnummer.Tests
 
@@ -29,14 +35,6 @@ for:
       - dotnet publish "Personnummer\Personnummer.csproj" -c Release -o artifacts\                
     artifacts:
       - path: artifacts\*.*
-    dotnet_csproj:
-      patch: true
-      file: '**\*.csproj'
-      version: '{APPVEYOR_REPO_TAG}'
-      package_version: '{APPVEYOR_REPO_TAG}'
-      assembly_version: '{APPVEYOR_REPO_TAG}'
-      file_version: '{APPVEYOR_REPO_TAG}'
-      informational_version: '{APPVEYOR_REPO_TAG}'
       
     #deploy:
     #  - provider: GitHub
