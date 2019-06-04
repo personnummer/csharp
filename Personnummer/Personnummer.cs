@@ -57,6 +57,50 @@ namespace Personnummer
 
             return sum % 10;
         }
+        
+        /// <summary>
+        /// Parse a social security number into a ParsedPersonnummer structure.
+        /// </summary>
+        /// <param name="value">Value as string to parse.</param>
+        /// <returns>Struct.</returns>
+        private static ParsedPersonnummer Parse(string value)
+        {
+            MatchCollection matches = regex.Matches(value);
+
+            if (matches.Count < 1 || matches[0].Groups.Count < 7)
+            {
+                return new ParsedPersonnummer();
+            }
+
+            GroupCollection groups = matches[0].Groups;
+            string century = string.Empty;
+            string decade = groups[2].Value;
+
+            if (!string.IsNullOrEmpty(groups[1].Value))
+            {
+                century = groups[1].Value;
+            }
+            else
+            {
+                int born = DateTime.Now.Year - int.Parse(decade);
+                if (groups[5].Value.Length != 0 && groups[5].Value == "+")
+                {
+                    born -= 100;
+                }
+
+                century = born.ToString().Substring(0, 2);
+            }
+
+            return new ParsedPersonnummer()
+            {
+                century = century,
+                decade = decade,
+                month = groups[3].Value,
+                day = groups[4].Value,
+                digits = $"{groups[6]}{groups[7]}"
+            };
+
+        }
 
         /// <summary>
         /// Function to make sure that the passed year, month and day is parseable to a date.
@@ -84,11 +128,20 @@ namespace Personnummer
         /// </summary>
         /// <param name="value">Value as string.</param>
         /// <returns>Result.</returns>
-        public static bool Valid(string value)
-        {
-            return Valid(Parse(value));
-        }
+        public static bool Valid(string value) => Valid(Parse(value));
 
+        /// <summary>
+        /// Validate Swedish social security number.
+        /// </summary>
+        /// <param name="value">Value as long.</param>
+        /// <returns>Result.</returns>
+        public static bool Valid(long value) => Valid(value.ToString());
+
+        /// <summary>
+        /// Validated a parsed social security number.
+        /// </summary>
+        /// <param name="parsed">Parsed value to validate.</param>
+        /// <returns></returns>
         private static bool Valid(ParsedPersonnummer parsed)
         {
             if (!parsed.Parsed)
@@ -98,70 +151,6 @@ namespace Personnummer
 
             bool valid = Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") == 0;
             return valid && (TestDate(parsed.century, parsed.decade, parsed.month, parsed.day) || TestDate(parsed.century, parsed.decade, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
-        }
-
-        private static ParsedPersonnummer Parse(string value)
-        {
-            MatchCollection matches = regex.Matches(value);
-
-            if (matches.Count < 1 || matches[0].Groups.Count < 7)
-            {
-                return new ParsedPersonnummer();
-            }
-
-            GroupCollection groups = matches[0].Groups;
-
-            try
-            {
-                // To get century we have to check multiple things.
-                // 1: Is the group[1] value more than 0 chars long? If so, we have it right away.
-                // 2: else check if group[5] is set, if it is, subtract decade from the current year and depending on + or -, subtract 0 or 100 more.
-                // 3: If none of the above, get closes century match.
-
-                string century = string.Empty;
-                string decade = groups[2].Value;
-
-                // Check-age
-               
-                if (!string.IsNullOrEmpty(groups[1].Value))
-                {
-                    century = groups[1].Value;
-                }
-                else
-                {
-                    int born = DateTime.Now.Year - int.Parse(decade);
-                    if (groups[5].Value.Length != 0 && groups[5].Value == "+")
-                    {
-                        born -= 100;
-                    }
-
-                    century = born.ToString().Substring(0, 2);
-                }
-
-                return new ParsedPersonnummer()
-                {
-                    century = century,
-                    decade  = decade,
-                    month   = groups[3].Value,
-                    day     = groups[4].Value,
-                    digits  = $"{groups[6]}{groups[7]}"
-                };
-            }
-            catch
-            {
-                // Could not parse. So invalid.
-                return new ParsedPersonnummer();
-            }
-        }
-
-        /// <summary>
-        /// Validate Swedish social security number.
-        /// </summary>
-        /// <param name="value">Value as long.</param>
-        /// <returns>Result.</returns>
-        public static bool Valid(long value)
-        {
-            return Valid(value.ToString());
         }
 
         /// <summary>
