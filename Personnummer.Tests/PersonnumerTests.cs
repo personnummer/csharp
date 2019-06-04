@@ -63,5 +63,44 @@ namespace Personnummer.Tests
             Assert.Equal(Personnummer.Valid(value), expected);
         }
 
+        [Theory]
+        [InlineData("701063-2391", 7010632391)]
+        [InlineData("640883-3231", 6408833231)]
+        [InlineData("550207-3900", 5502073900)]
+        public void TestParseStringWithoutCentury(string value, long expected)
+        {
+            Assert.Equal(Personnummer.Format(value), expected);
+        }
+
+        [Theory]
+        [InlineData("701063+2391", 187010632391)]
+        [InlineData("701063-2391", 197010632391)]
+        [InlineData("640883-3231", 196408833231)]
+        [InlineData("550207-3900", 195502073900)]
+        public void TestParseStringWithCentury(string value, long expected)
+        {
+            Assert.Equal(Personnummer.Format(value, true), expected);
+        }
+
+
+        [Theory]
+        [InlineData(7010632391, "701063-2391")]
+        [InlineData(6408833231, "640883-3231")]
+        [InlineData(5502073900, "550207-3900")]
+        public void TestParseLongWithoutCentury(long value, string expected)
+        {
+            Assert.Equal(Personnummer.Format(value), expected);
+        }
+
+        [Theory]
+        [InlineData(187010632391, "187010632391")]
+        [InlineData(197010632391, "197010632391")]
+        [InlineData(196408833231, "196408833231")]
+        [InlineData(195502073900, "195502073900")]
+        public void TestParseLongWithCentury(long value, string expected)
+        {
+            Assert.Equal(Personnummer.Format(value), expected);
+        }
+
     }
 }

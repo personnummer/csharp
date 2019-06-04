@@ -92,18 +92,19 @@ namespace Personnummer
         /// <returns>Result.</returns>
         public static bool Valid(string value)
         {
-            ParsedPersonnummer parsed = Parse(value);
+            return Valid(Parse(value));
+        }
 
+        private static bool Valid(ParsedPersonnummer parsed)
+        {
             if (!parsed.Parsed)
             {
                 return false;
             }
 
-
             bool valid = Luhn($"{parsed.decade}{parsed.month}{parsed.day}{parsed.digits}") == 0;
             return valid && (TestDate(parsed.decade, parsed.month, parsed.day) || TestDate(parsed.day, parsed.month, (int.Parse(parsed.day) - 60).ToString()));
         }
-
 
         private static ParsedPersonnummer Parse(string value)
         {
@@ -142,5 +143,42 @@ namespace Personnummer
         {
             return Valid(value.ToString());
         }
+
+        /// <summary>
+        /// Format a Swedish social security number in long format to a string format.
+        /// </summary>
+        /// <param name="value">Value as long.</param>
+        /// <param name="withCentury">Include century instead of +/-.</param>
+        /// <returns>Swedish social security number as a string.</returns>
+        /// <exception cref="ValidationException">On invalid social security or coordination number.</exception>
+        public static string Format(long value, bool withCentury = false)
+        {
+            ParsedPersonnummer parsed = Parse(value.ToString());
+            if (!parsed.Parsed)
+            {
+                throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
+            }
+
+            return "";
+        }
+
+        /// <summary>
+        /// Format a Swedish social security number in string format to a long format.
+        /// </summary>
+        /// <param name="value">Value as string.</param>
+        /// <param name="withCentury">Include century in output value.</param>
+        /// <returns>Swedish social security number as a long.</returns>
+        /// <exception cref="ValidationException">On invalid social security or coordination number.</exception>
+        public static long Format(string value, bool withCentury = false)
+        {
+            ParsedPersonnummer parsed = Parse(value);
+            if (!parsed.Parsed)
+            {
+                throw new ValidationException($"{value} is not a valid Swedish social security or coordination number.");
+            }
+
+            return 0;
+        }
+
     }
 }
