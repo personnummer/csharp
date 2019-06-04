@@ -65,7 +65,15 @@ namespace Personnummer
         /// <returns>Struct.</returns>
         private static ParsedPersonnummer Parse(string value)
         {
-            MatchCollection matches = regex.Matches(value);
+            MatchCollection matches;
+            try
+            {
+                matches = regex.Matches(value);
+            }
+            catch
+            {
+                return new ParsedPersonnummer();
+            }
 
             if (matches.Count < 1 || matches[0].Groups.Count < 7)
             {
