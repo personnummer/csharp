@@ -10,8 +10,8 @@ before_build:
   - dotnet restore
 build_script:
   - ps: |
-      if ( $env:APPVEYOR_REPO_TAG ) {
-          dotnet build /p:Version=$env::APPVEYOR_REPO_TAG
+      if ( $env:APPVEYOR_REPO_TAG -eq $null ) {
+          dotnet build /p:Version=$env:APPVEYOR_REPO_TAG
       } else {
           dotnet build
       }
@@ -22,7 +22,7 @@ test_script:
 # Only publish if on master branch and not a PR.
 after_test:
   - ps: |
-      if ( $env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_PULL_REQUEST_NUMBER ) {
+      if ( $env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne $null ) {
           dotnet publish "Personnummer\Personnummer.csproj" -c Release -o artifacts\    
       }
 
@@ -30,9 +30,7 @@ for:
   - branches:
       only:
         - master
-    configuration: Release
-    after_test:
-      - dotnet publish "Personnummer\Personnummer.csproj" -c Release -o artifacts\                
+    configuration: Release           
     artifacts:
       - path: artifacts\*.*
       
