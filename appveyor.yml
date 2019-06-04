@@ -5,16 +5,19 @@ configuration:
 - Debug
 - Release
 clone_depth: 1
-nuget:
-  disable_publish_on_pr: true
 before_build:
 - dotnet restore
 build_script:
 - dotnet build
-after_build:
-- dotnet publish "Personnummer\Personnummer.csproj" -c %CONFIGURATION% -o artifacts\%CONFIGURATION%
 test_script:
-- cd Personnummer.Tests
-- dotnet xunit
-artifacts:
-- path: artifacts\**\*.*
+- dotnet test Personnummer.Tests
+
+for:
+- branches:
+    only:
+     - master
+  configuration: Release
+  after_test:
+  - dotnet publish "Personnummer\Personnummer.csproj" -c %CONFIGURATION% -o artifacts\%CONFIGURATION%                
+  artifacts:
+  - path: artifacts\**\*.*
