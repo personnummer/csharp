@@ -37,9 +37,10 @@ namespace Personnummer.Tests
         [InlineData(5502073900, true)]
         public void TestPersonnummerInt(long value, bool expected)
         {
+
             Assert.Equal(Personnummer.Valid(value), expected);
         }
-        
+
         [Theory]
         [InlineData("701063-2391", true)]
         [InlineData("640883-3231", true)]
@@ -53,7 +54,7 @@ namespace Personnummer.Tests
         [InlineData("6102202425", false)]
         [InlineData("890302-4529", false)]
         [InlineData("890362-4528", false)]
-        public void TexstCoOrdinationNumbersString(string value, bool expected)
+        public void TestCoOrdinationNumbersString(string value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
         }
@@ -64,9 +65,65 @@ namespace Personnummer.Tests
         [InlineData(9001610017, false)]
         [InlineData(6408933231, false)]
         [InlineData(5502073900, true)]
-        public void TexstCoOrdinationNumbersInt(long value, bool expected)
+        public void TestCoOrdinationNumbersInt(long value, bool expected)
         {
             Assert.Equal(Personnummer.Valid(value), expected);
+        }
+
+        [Theory]
+        [InlineData("130401+2931", 1304012931)]
+        [InlineData("701063-2391", 7010632391)]
+        [InlineData("640883-3231", 6408833231)]
+        [InlineData("550207-3900", 5502073900)]
+        [InlineData("6408833231", 6408833231)]
+        public void TestParseStringWithoutCentury(string value, long expected)
+        {
+            Assert.Equal(Personnummer.Format(value), expected);
+        }
+
+        [Theory]
+        [InlineData("187010632391", 187010632391)]
+        [InlineData("197010632391", 197010632391)]
+        [InlineData("196408833231", 196408833231)]
+        [InlineData("6408833231", 196408833231)]
+        [InlineData("0001010107", 200001010107)]
+        [InlineData("000101-0107", 200001010107)]
+        [InlineData("195502073900", 195502073900)]
+        public void TestParseStringWithCentury(string value, long expected)
+        {
+            Assert.Equal(Personnummer.Format(value, true), expected);
+        }
+
+
+        [Theory]
+        [InlineData(191304012931, "130401+2931")]
+        [InlineData(7010632391, "701063-2391")]
+        [InlineData(6408833231, "640883-3231")]
+        [InlineData(5502073900, "550207-3900")]
+        public void TestParseLongWithoutCentury(long value, string expected)
+        {
+            Assert.Equal(Personnummer.Format(value), expected);
+        }
+
+        [Theory]
+        [InlineData(187010632391, "187010632391")]
+        [InlineData(197010632391, "197010632391")]
+        [InlineData(196408833231, "196408833231")]
+        [InlineData(195502073900, "195502073900")]
+        public void TestParseLongWithCentury(long value, string expected)
+        {
+            Assert.Equal(Personnummer.Format(value, true), expected);
+        }
+
+        [Theory]
+        [InlineData("dfsafdsadfs")]
+        [InlineData(6408933231)]
+        [InlineData('a')]
+        [InlineData(null)]
+        [InlineData(123123)]
+        public void TestParseInvalidThrows(dynamic value)
+        {
+            Assert.Throws<ValidationException>(() => Personnummer.Format(value));
         }
 
 
