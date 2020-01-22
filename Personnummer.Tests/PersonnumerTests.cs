@@ -6,29 +6,6 @@ namespace Personnummer.Tests
 {
     public class PersonnumerTests
     {
-
-        /*
-         VALID NUMBERS:
-            - 8507099805 (nummer)
-            - 198507099805
-            - 198507099813
-            - 850709-9813
-            - 196411139808
-        INVALID NUMBERS:
-            - 19850709980
-            - 19850709981
-            - 19641113980
-        VALID COORD NUMBERS:
-            - 198507699802
-            - 850769-9802
-            - 198507699810
-            - 850769-9810
-        INVALID COORD NUMBERS
-            - 198567099805
-
-         */
-
-
         [Theory]
         [InlineData("198507099805", true)]
         [InlineData("198507099813", true)]
