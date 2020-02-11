@@ -7,100 +7,25 @@ namespace Personnummer.Tests
     public class PersonnumerTests
     {
         [Theory]
-        [InlineData("198507099805", true)]
-        [InlineData("198507099813", true)]
-        [InlineData("850709-9813", true)]
-        [InlineData("196411139808", true)]
-        [InlineData("8507099805", true)]
-        [InlineData("19850709980", false)]
-        [InlineData("19850709981", false)]
-        [InlineData("19641113980", false)]
-        public void TestPersonnummerString(string value, bool expected)
+        [ClassData(typeof(PersonnummerDataProvider))]
+        public void TestValid(PersonnummerData data)
         {
-            Assert.Equal(Personnummer.Valid(value, false), expected);
-        }
-
-
-        [Theory]
-        [InlineData(198507099805, true)]
-        [InlineData(198507099813, true)]
-        [InlineData(8507099813, true)]
-        [InlineData(196411139808, true)]
-        [InlineData(8507099805, true)]
-        [InlineData(19850709980, false)]
-        [InlineData(19850709981, false)]
-        [InlineData(19641113980, false)]
-        public void TestPersonnummerInt(long value, bool expected)
-        {
-
-            Assert.Equal(Personnummer.Valid(value), expected);
+            Assert.Equal(Personnummer.Valid(data.ShortFormat, false), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.LongFormat, false), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.SeparatedFormat, false), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.SeparatedLong, false), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.Integer, false), data.Valid);
         }
 
         [Theory]
-        [InlineData("198507699802", true)]
-        [InlineData("850769-9802", true)]
-        [InlineData("198507699810", true)]
-        [InlineData("850769-9810", true)]
-        [InlineData("198567099805", false)]
-        public void TestCoOrdinationNumbersString(string value, bool expected)
+        [ClassData(typeof(CoordinationNumberProvider))]
+        public void TestValidCoOrdinationNumbers(PersonnummerData data)
         {
-            Assert.Equal(Personnummer.Valid(value), expected);
-        }
-
-        [Theory]
-        [InlineData(198507699802, true)]
-        [InlineData(8507699802, true)]
-        [InlineData(198507699810, true)]
-        [InlineData(8507699810, true)]
-        [InlineData(198567099805, false)]
-        public void TestCoOrdinationNumbersInt(long value, bool expected)
-        {
-            Assert.Equal(Personnummer.Valid(value), expected);
-        }
-
-        [Theory]
-        [InlineData("198507099805", 8507099805)]
-        [InlineData("198507099813", 8507099813)]
-        [InlineData("850709-9813",  8507099813)]
-        [InlineData("196411139808", 6411139808)]
-        [InlineData("8507099805", 8507099805)]
-        public void TestParseStringWithoutCentury(string value, long expected)
-        {
-            Assert.Equal(Personnummer.Format(value), expected);
-        }
-
-        [Theory]
-        [InlineData("198507099805", 198507099805)]
-        [InlineData("198507099813", 198507099813)]
-        [InlineData("850709-9813", 198507099813)]
-        [InlineData("196411139808", 196411139808)]
-        [InlineData("8507099805", 198507099805)]
-        public void TestParseStringWithCentury(string value, long expected)
-        {
-            Assert.Equal(Personnummer.Format(value, true), expected);
-        }
-
-
-        [Theory]
-        [InlineData(8507099805, "850709-9805")]
-        [InlineData(198507099813, "850709-9813")]
-        [InlineData(8507099813, "850709-9813")]
-        [InlineData(6411139808, "641113-9808")]
-        [InlineData(198507099805, "850709-9805")]
-        public void TestParseLongWithoutCentury(long value, string expected)
-        {
-            Assert.Equal(Personnummer.Format(value), expected);
-        }
-
-        [Theory]
-        [InlineData(8507099805, "198507099805")]
-        [InlineData(198507099813, "198507099813")]
-        [InlineData(8507099813, "198507099813")]
-        [InlineData(6411139808, "196411139808")]
-        [InlineData(198507099805, "198507099805")]
-        public void TestParseLongWithCentury(long value, string expected)
-        {
-            Assert.Equal(Personnummer.Format(value, true), expected);
+            Assert.Equal(Personnummer.Valid(data.ShortFormat), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.LongFormat), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.SeparatedFormat), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.SeparatedLong), data.Valid);
+            Assert.Equal(Personnummer.Valid(data.Integer), data.Valid);
         }
 
         [Theory]
@@ -116,34 +41,30 @@ namespace Personnummer.Tests
 
 
         [Theory]
-        [InlineData("198507099805", true)]
-        [InlineData("198507099813", true)]
-        [InlineData("850709-9813", true)]
-        [InlineData("196411139808", true)]
-        [InlineData("8507099805", true)]
-        [InlineData("198507699802", false)]
-        [InlineData("850769-9802", false)]
-        [InlineData("198507699810", false)]
-        [InlineData("850769-9810", false)]
-        public void TestNotAcceptingCoordinationNumbersString(string value, bool expected)
+        [ClassData(typeof(CoordinationNumberProvider))]
+        public void TestNotAcceptingCoordinationNumbers(PersonnummerData data)
         {
-            Assert.Equal(Personnummer.Valid(value, false), expected);
+            Assert.False(Personnummer.Valid(data.Integer, false));
+            Assert.False(Personnummer.Valid(data.LongFormat, false));
+            Assert.False(Personnummer.Valid(data.SeparatedFormat, false));
+            Assert.False(Personnummer.Valid(data.SeparatedLong, false));
+            Assert.False(Personnummer.Valid(data.ShortFormat, false));
         }
+
 
         [Theory]
-        [InlineData(198507099805, true)]
-        [InlineData(198507099813, true)]
-        [InlineData(8507099813, true)]
-        [InlineData(196411139808, true)]
-        [InlineData(8507099805, true)]
-        [InlineData(198507699802, false)]
-        [InlineData(8507699802, false)]
-        [InlineData(198507699810, false)]
-        [InlineData(8507699810, false)]
-        public void TestNotAcceptingCoordinationNumbersLong(long value, bool expected)
+        [ClassData(typeof(DataProvider))]
+        public void TestFormatInteger(PersonnummerData data)
         {
-            Assert.Equal(Personnummer.Valid(value, false), expected);
+            if (data.Valid)
+            {
+                Assert.Equal(data.SeparatedFormat, Personnummer.Format(data.Integer, false));
+                Assert.Equal(data.LongFormat, Personnummer.Format(data.Integer, true));
+            }
+            else
+            {
+                Assert.Throws<ValidationException>(() => Personnummer.Format(data.Integer));
+            }
         }
-
     }
 }
