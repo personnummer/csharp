@@ -19,8 +19,14 @@ namespace Personnummer.Tests
         public string SeparatedFormat { get; set; }
         [JsonProperty("separated_long")]
         public string SeparatedLong { get; set; }
+        [JsonProperty("valid")]
         public bool Valid { get; set; }
+        [JsonProperty("type")]
         public string Type { get; set; }
+        [JsonProperty("isMale")]
+        public bool IsMale { get; set; }
+        [JsonProperty("isFemale")]
+        public bool IsFemale { get; set; }
     }
 
     public class DataProvider: IEnumerable<object[]>
@@ -59,7 +65,7 @@ namespace Personnummer.Tests
         }
     }
 
-    public class PersonnummerDataProvider : DataProvider
+    public class SsnDataProvider : DataProvider
     {
         public override IEnumerator<object[]> GetEnumerator()
         {
@@ -67,7 +73,7 @@ namespace Personnummer.Tests
         }
     }
 
-    public class CoordinationNumberProvider : DataProvider
+    public class CnDataProvider : DataProvider
     {
         public override IEnumerator<object[]> GetEnumerator()
         {
