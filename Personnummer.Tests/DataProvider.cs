@@ -80,4 +80,38 @@ namespace Personnummer.Tests
             return AsObject(o => o.Type != "ssn").GetEnumerator();
         }
     }
+
+    public class ValidCnDataProvider : CnDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => o.Type != "ssn" && o.Valid).GetEnumerator();
+        }
+    }
+
+    public class InvalidCnDataProvider : CnDataProvider
+    {
+        
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => o.Type != "ssn" && !o.Valid).GetEnumerator();
+        }
+}
+
+    public class ValidSsnDataProvider : SsnDataProvider
+    {
+
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => o.Type == "ssn" && o.Valid).GetEnumerator();
+        }
+    }
+
+    public class InvalidSsnDataProvider : SsnDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => o.Type == "ssn" && !o.Valid).GetEnumerator();
+        }
+    }
 }
