@@ -2,19 +2,6 @@
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/personnummer/csharp/Tests)](https://github.com/personnummer/csharp/actions)
 
-
-
-
-[![Packagist Version](https://img.shields.io/packagist/v/personnummer/personnummer)](https://packagist.org/packages/personnummer/personnummer) 
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/personnummer/personnummer)](https://packagist.org/packages/personnummer/personnummer)
-
-
-
-
-
-[![Build status](https://ci.appveyor.com/api/projects/status/ajkcx0gg8rke8hx2?svg=true
-)](https://ci.appveyor.com/project/frozzare/csharp/branch/master)
-
 Validate Swedish social security numbers.
 
 ## Installation
