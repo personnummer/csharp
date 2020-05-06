@@ -2,19 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Company>personnummer</Company>
-    <Authors>Johannes Tegnér, Fredrik Forsmo</Authors>
-    <Description>Verify Swedish social security numbers.</Description>
+    <Company>Personnummer</Company>
+    <Authors>Johannes Tegnér</Authors>
+    <Description>Verify Swedish personal identity numbers.</Description>
     <PackageProjectUrl>https://github.com/personnummer/csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/personnummer/csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Validation, Social security numbers, Swedish, Sweden, Verify</PackageTags>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>Validation, Personal Identity numbers, Social security numbers, Swedish, Sweden, Verify</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicense>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicense>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.3</Version>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReleaseNotes />
     <Copyright>(C) - 2019 Johannes Tegnér &amp; Fredrik Forsmo</Copyright>
