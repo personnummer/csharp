@@ -1,0 +1,85 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [ '2.2.103', '3.0.100', '3.1.100' ]
+    name: Test dotnet ${{ matrix.dotnet-versions }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up dotnet.
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+      - name: Build
+        run: dotnet build
+      - name: Run test suite
+        run: dotnet test
+
+name: Release
+on:
+  release:
+    types: [published]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [ '2.2.103', '3.0.100', '3.1.100' ]
+    name: Test dotnet ${{ matrix.dotnet-versions }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up dotnet.
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+      - name: Build
+        run: dotnet build
+      - name: Run test suite
+        run: dotnet test
+  release-gh:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up dotnet.
+        uses: actions/setup-dotnet@v1
+        with:
+          env:
+            NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          dotnet-version: '3.1.100'
+      - name: Build
+        run: dotnet build Personnummer
+      - name: Package
+        run: dotnet package --configuration Release Personnummer
+      - name: publish GH
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://nuget.pkg.github.com/Personnummer/index.json
+  release-nuget:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up dotnet.
+        uses: actions/setup-dotnet@v1
+        with:
+          env:
+            NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
+          dotnet-version: '3.1.100'
+      - name: Build
+        run: dotnet build Personnummer
+      - name: Package
+        run: dotnet package --configuration Release Personnummer
+      - name: publish Nuget
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json
+
+
