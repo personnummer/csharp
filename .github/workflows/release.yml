@@ -13,7 +13,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
-          dotnet-version: '3.1.300'
+          dotnet-version: '3.1.100'
           source-url: https://nuget.pkg.github.com/Personnummer/index.json
       - name: Build
         run: dotnet build --configuration Release  Personnummer
@@ -31,7 +31,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
         with:
-          dotnet-version: '3.1.300'
+          dotnet-version: '3.1.100'
           source-url: https://www.nuget.org/api/v2/package
       - name: Build
         run: dotnet build --configuration Release Personnummer
