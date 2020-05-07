@@ -173,11 +173,11 @@ namespace Personnummer.Tests
             DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 4), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
             int years = DateTime.Now.Year - dt.Year;
 
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age);
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age);
         }
 
         [Theory]
@@ -190,11 +190,11 @@ namespace Personnummer.Tests
             DateTime dt    = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 6) + strDay, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
             int      years = DateTime.Now.Year - dt.Year;
 
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
         }
 
         [Theory]
