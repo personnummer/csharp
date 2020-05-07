@@ -28,12 +28,13 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           dotnet-version: '3.1.100'
+          source-url: https://nuget.pkg.github.com/Personnummer/index.json
       - name: Build
         run: dotnet build --configuration Release  Personnummer
       - name: Package
         run: dotnet pack --configuration Release Personnummer
       - name: publish GH
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://nuget.pkg.github.com/Personnummer/index.json
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg
   release-nuget:
     runs-on: ubuntu-latest
     name: Deploy
@@ -46,9 +47,10 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
         with:
           dotnet-version: '3.1.100'
+          source-url: -s https://api.nuget.org/v3/index.json
       - name: Build
         run: dotnet build --configuration Release Personnummer
       - name: Package
         run: dotnet pack --configuration Release Personnummer
       - name: publish Nuget
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg
