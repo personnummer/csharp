@@ -53,4 +53,4 @@ jobs:
       - name: Package
         run: dotnet pack --configuration Release Personnummer
       - name: publish Nuget
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json
