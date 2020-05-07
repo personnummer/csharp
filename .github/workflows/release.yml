@@ -3,25 +3,7 @@ on:
   release:
     types: [published]
 jobs:
-  release-gh:
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up dotnet.
-        uses: actions/setup-dotnet@v1
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        with:
-          dotnet-version: '3.1.100'
-          source-url: https://nuget.pkg.github.com/Personnummer/index.json
-      - name: Build
-        run: dotnet build --configuration Release  Personnummer
-      - name: Package
-        run: dotnet pack --configuration Release Personnummer
-      - name: publish GH
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg
-  release-nuget:
+  release:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
@@ -36,3 +18,5 @@ jobs:
         run: dotnet pack --configuration Release Personnummer
       - name: publish Nuget
         run: dotnet nuget push Personnummer/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json
+      - name: publish GH
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}} -s https://nuget.pkg.github.com/Personnummer/index.json
