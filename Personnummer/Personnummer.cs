@@ -5,20 +5,20 @@ using Personnummer.Exceptions;
 
 namespace Personnummer
 {
-    public struct PersonnummerOptions
-    {
-        #region Fields and Properties
-
-        public bool AllowCoordinationNumber { get; set; }
-
-        #endregion
-    }
-
     public class Personnummer
     {
+        public struct Options
+        {
+            public bool AllowCoordinationNumber { get; set; }
+        }
+
+
         #region Fields and Properties
 
-        public string Age { get; }
+        private readonly int realDay;
+
+        public string Age => (DateTime.Now.Year - (new DateTime(int.Parse($"{FullYear}"), int.Parse(Month), realDay, 0, 0, 0)).Year).ToString();
+        public string Separator => int.Parse(Age) >= 100 ? "+" : "-";
 
         public string Century { get; }
 
@@ -29,8 +29,6 @@ namespace Personnummer
         public string Month { get; }
 
         public string Day { get; }
-
-        public string Separator { get; } = "-";
 
         public string Numbers { get; }
 
@@ -49,11 +47,12 @@ namespace Personnummer
         ///
         /// In case options is not passed, they will default to accept any personal and coordination numbers.
         /// </summary>
+        /// <exception cref="PersonnummerException">On parse error.</exception>
         /// <param name="ssn">Personal identity number - as string - to create from.</param>
         /// <param name="options">Options object.</param>
-        public Personnummer(string ssn, PersonnummerOptions? options = null)
+        public Personnummer(string ssn, Options? options = null)
         {
-            options ??= new PersonnummerOptions() { AllowCoordinationNumber = true };
+            options ??= new Options() { AllowCoordinationNumber = true };
             MatchCollection matches;
             try
             {
@@ -65,7 +64,7 @@ namespace Personnummer
             }
             catch
             {
-                throw new PersonnummerException("Failed to parse personal number. Invalid input.");
+                throw new PersonnummerException("Failed to parse personal identity number. Invalid input.");
             }
 
             GroupCollection groups = matches[0].Groups;
@@ -88,28 +87,18 @@ namespace Personnummer
             }
 
             // Create date time object.
-            int realDay = int.Parse(groups[4].Value);
+            int day = int.Parse(groups[4].Value);
             if (options.Value.AllowCoordinationNumber)
             {
-                realDay = realDay > 60 ? realDay - 60 : realDay;
+                day = day > 60 ? day - 60 : day;
                 IsCoordinationNumber = true;
             }
-            else if (realDay > 60)
+            else if (day > 60)
             {
-                throw new PersonnummerException("Invalid person number.");
+                throw new PersonnummerException("Invalid personal identity number.");
             }
 
-
-            DateTime date = new DateTime(int.Parse($"{century}{decade}"), int.Parse(groups[3].Value), realDay, 0, 0, 0);
-            int ageInt = (DateTime.Now.Year - date.Year);
-            Age = ageInt.ToString();
-
-
-            if (ageInt >= 100)
-            {
-                Separator = "+";
-            }
-
+            realDay       = day;
             Century       = century;
             Year          = decade;
             FullYear      = century + decade;
@@ -123,10 +112,16 @@ namespace Personnummer
 
             if (Luhn($"{Year}{Month}{Day}{groups[6].Value}") != int.Parse(ControlNumber))
             {
-                throw new PersonnummerException("Invalid person number.");
+                throw new PersonnummerException("Invalid personal identity number.");
             }
         }
 
+        /// <summary>
+        /// Format the personal identity number into a valid string (YYMMDD-/+XXXX)
+        /// If longFormat is true, it will include the century (YYYYMMDD-/+XXXX)
+        /// </summary>
+        /// <param name="longFormat">If century should be included.</param>
+        /// <returns>Formatted personal identity number.</returns>
         public string Format(bool longFormat = false)
         {
             return (longFormat ? Century : "") + $"{Year}{Month}{Day}{Separator}{Numbers}";
@@ -141,7 +136,7 @@ namespace Personnummer
         /// <param name="options">Options object.</param>
         /// <exception cref="PersonnummerException">On invalid personal identity number.</exception>
         /// <returns>Personal identity number as a Personnummer object.</returns>
-        public static Personnummer Parse(string ssn, PersonnummerOptions? options = null)
+        public static Personnummer Parse(string ssn, Options? options = null)
         {
             return new Personnummer(ssn, options);
         }
