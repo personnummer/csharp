@@ -27,7 +27,7 @@ jobs:
         with:
           dotnet-version: '3.1.100'
       - name: Build
-        run: dotnet build Personnummer
+        run: dotnet build --configuration Release  Personnummer
       - name: Package
         run: dotnet pack --configuration Release Personnummer
       - name: publish GH
@@ -45,7 +45,7 @@ jobs:
         with:
           dotnet-version: '3.1.100'
       - name: Build
-        run: dotnet build Personnummer
+        run: dotnet build --configuration Release Personnummer
       - name: Package
         run: dotnet pack --configuration Release Personnummer
       - name: publish Nuget
