@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
 using Personnummer.Exceptions;
 using Xunit;
 
@@ -12,19 +11,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestCtr(PersonnummerData ssn)
         {
-            Assert.IsType<Personnummer>(new Personnummer(ssn.LongFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.ShortFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
@@ -34,19 +33,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestCtrCn(PersonnummerData ssn)
         {
-            Assert.IsType<Personnummer>(new Personnummer(ssn.LongFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.ShortFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.IsType<Personnummer>(new Personnummer(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
@@ -58,19 +57,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(InvalidCnDataProvider))]
         public void TestCtrInvalid(PersonnummerData ssn)
         {
-            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.LongFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.ShortFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => new Personnummer(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
@@ -81,19 +80,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestParse(PersonnummerData ssn)
         {
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
@@ -103,19 +102,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestParseCn(PersonnummerData ssn)
         {
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.IsType<Personnummer>(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
@@ -127,19 +126,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(InvalidCnDataProvider))]
         public void TestParseInvalid(PersonnummerData ssn)
         {
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = false
             }));
@@ -149,19 +148,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(InvalidCnDataProvider))]
         public void TestParseInvalidCn(PersonnummerData ssn)
         {
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.LongFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
-            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options
             {
                 AllowCoordinationNumber = true
             }));
@@ -174,11 +173,11 @@ namespace Personnummer.Tests
             DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 4), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
             int years = DateTime.Now.Year - dt.Year;
 
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = false }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = false }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions { AllowCoordinationNumber = false }).Age));
+            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false }).Age));
         }
 
         [Theory]
@@ -191,11 +190,11 @@ namespace Personnummer.Tests
             DateTime dt    = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 6) + strDay, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
             int      years = DateTime.Now.Year - dt.Year;
 
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Age));
-            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years, int.Parse(Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Age));
+            Assert.Equal(years > 99 ? years - 100 : years, int.Parse(Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age));
         }
 
         [Theory]
@@ -203,11 +202,11 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestFormat(PersonnummerData ssn)
         {
-            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).Format());
-            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Format());
-            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Format());
+            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Format());
+            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Format());
+            Assert.Equal(ssn.SeparatedFormat, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Format());
             // Short format will always guess that it's latest century.
-            Assert.Equal(ssn.SeparatedFormat.Replace("+", "-"), Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Format());
+            Assert.Equal(ssn.SeparatedFormat.Replace("+", "-"), Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Format());
         }
 
         [Theory]
@@ -215,9 +214,9 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestFormatLong(PersonnummerData ssn)
         {
-            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).Format(true));
-            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Format(true));
-            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Format(true));
+            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Format(true));
+            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Format(true));
+            Assert.Equal(ssn.SeparatedLong, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Format(true));
         }
 
         [Theory]
@@ -247,15 +246,15 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestMaleFemale(PersonnummerData ssn)
         {
-            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsMale);
-            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).IsMale);
-            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsMale);
-            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsMale);
+            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsMale);
+            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).IsMale);
+            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsMale);
+            Assert.Equal(ssn.IsMale, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsMale);
 
-            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsFemale);
-            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).IsFemale);
-            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsFemale);
-            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.ShortFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).IsFemale);
+            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsFemale);
+            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).IsFemale);
+            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsFemale);
+            Assert.Equal(ssn.IsFemale, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).IsFemale);
         }
 
         [Theory]
@@ -264,9 +263,9 @@ namespace Personnummer.Tests
         public void TestSeparator(PersonnummerData ssn)
         {
             string sep = ssn.SeparatedFormat.Contains('+') ? "+" : "-";
-            Assert.Equal(sep, Personnummer.Parse(ssn.LongFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Separator);
-            Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedLong, new PersonnummerOptions { AllowCoordinationNumber = true }).Separator);
-            Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new PersonnummerOptions { AllowCoordinationNumber = true }).Separator);
+            Assert.Equal(sep, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
+            Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
+            Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             // Getting the separator from a short formatted none-separated person number is not actually possible if it is intended to be a +.
         }
     }
