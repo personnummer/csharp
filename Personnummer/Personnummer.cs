@@ -17,8 +17,8 @@ namespace Personnummer
 
         private readonly int realDay;
 
-        public string Age => (DateTime.Now.Year - (new DateTime(int.Parse($"{FullYear}"), int.Parse(Month), realDay, 0, 0, 0)).Year).ToString();
-        public string Separator => int.Parse(Age) >= 100 ? "+" : "-";
+        public int Age => (DateTime.Now.Year - (new DateTime(int.Parse($"{FullYear}"), int.Parse(Month), realDay, 0, 0, 0)).Year);
+        public string Separator => Age >= 100 ? "+" : "-";
 
         public string Century { get; }
 
