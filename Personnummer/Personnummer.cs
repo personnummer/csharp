@@ -124,7 +124,7 @@ namespace Personnummer
         /// <returns>Formatted personal identity number.</returns>
         public string Format(bool longFormat = false)
         {
-            return (longFormat ? Century : "") + $"{Year}{Month}{Day}{Separator}{Numbers}";
+            return $"{(longFormat ? FullYear : Year)}{Month}{Day}{Separator}{Numbers}";
         }
 
         /// <summary>
