@@ -6,7 +6,6 @@ jobs:
   release-gh:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: test
     steps:
       - uses: actions/checkout@v2
       - name: Set up dotnet.
@@ -25,7 +24,6 @@ jobs:
   release-nuget:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: test
     steps:
       - uses: actions/checkout@v2
       - name: Set up dotnet.
