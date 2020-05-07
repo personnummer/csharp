@@ -24,14 +24,14 @@ jobs:
       - name: Set up dotnet.
         uses: actions/setup-dotnet@v1
         with:
-          env:
-            NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           dotnet-version: '3.1.100'
       - name: Build
         run: dotnet build Personnummer
       - name: Package
         run: dotnet package --configuration Release Personnummer
       - name: publish GH
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://nuget.pkg.github.com/Personnummer/index.json
   release-nuget:
     runs-on: ubuntu-latest
@@ -41,12 +41,12 @@ jobs:
       - name: Set up dotnet.
         uses: actions/setup-dotnet@v1
         with:
-          env:
-            NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
           dotnet-version: '3.1.100'
       - name: Build
         run: dotnet build Personnummer
       - name: Package
         run: dotnet package --configuration Release Personnummer
       - name: publish Nuget
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
         run: dotnet nuget push Personnummer/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json
