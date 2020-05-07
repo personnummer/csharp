@@ -28,7 +28,7 @@ jobs:
       - name: Build
         run: dotnet build Personnummer
       - name: Package
-        run: dotnet package --configuration Release Personnummer
+        run: dotnet pack --configuration Release Personnummer
       - name: publish GH
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -45,7 +45,7 @@ jobs:
       - name: Build
         run: dotnet build Personnummer
       - name: Package
-        run: dotnet package --configuration Release Personnummer
+        run: dotnet pack --configuration Release Personnummer
       - name: publish Nuget
         env:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
