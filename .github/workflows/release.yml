@@ -47,7 +47,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
         with:
           dotnet-version: '3.1.100'
-          source-url: -s https://api.nuget.org/v3/index.json
+          source-url: https://api.nuget.org/v3/index.json
       - name: Build
         run: dotnet build --configuration Release Personnummer
       - name: Package
