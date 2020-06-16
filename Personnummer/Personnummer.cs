@@ -160,7 +160,7 @@ namespace Personnummer
         }
 
         #region Static internal.
-        private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-\s]?)(\d{3})(\d)$");
+        private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-\s]?)((?!000)\d{3})(\d)$");
 
         private static int Luhn(string value)
         {
