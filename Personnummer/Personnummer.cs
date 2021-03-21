@@ -90,8 +90,8 @@ namespace Personnummer
             int day = int.Parse(groups[4].Value);
             if (options.Value.AllowCoordinationNumber)
             {
-                day = day > 60 ? day - 60 : day;
-                IsCoordinationNumber = true;
+                IsCoordinationNumber = day > 60;
+                day = IsCoordinationNumber ? day - 60 : day;
             }
             else if (day > 60)
             {
@@ -129,7 +129,7 @@ namespace Personnummer
 
         /// <summary>
         /// Parse a personal identity number - as string - into a Personnummer object.
-        /// 
+        ///
         /// In case options is not passed, they will default to accept any personal identity and coordination numbers.
         /// </summary>
         /// <param name="ssn">Personal identity number to parse.</param>
