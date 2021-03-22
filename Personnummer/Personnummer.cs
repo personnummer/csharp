@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using Personnummer.Exceptions;
 
@@ -109,6 +111,12 @@ namespace Personnummer
 
             IsMale = int.Parse(Numbers[2].ToString()) % 2 == 1;
             IsFemale = !IsMale;
+
+            // Try parse date-time to make sure it's actually a real date.
+            if (!DateTime.TryParse($"{FullYear}-{Month:00}-{realDay:00}", out _))
+            {
+                throw new PersonnummerException("Invalid personal identity number.");
+            }
 
             if (Luhn($"{Year}{Month}{Day}{groups[6].Value}") != int.Parse(ControlNumber))
             {

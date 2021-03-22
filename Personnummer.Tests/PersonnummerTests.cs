@@ -268,5 +268,30 @@ namespace Personnummer.Tests
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             // Getting the separator from a short formatted none-separated person number is not actually possible if it is intended to be a +.
         }
+
+        [Theory]
+        [ClassData(typeof(OrgNumberDataProvider))]
+        public void TestOrgNumber(PersonnummerData orgnr)
+        {
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(orgnr.SeparatedFormat, new Personnummer.Options
+            {
+                AllowCoordinationNumber = true
+            }));
+
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(orgnr.SeparatedFormat, new Personnummer.Options
+            {
+                AllowCoordinationNumber = false
+            }));
+
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(orgnr.ShortFormat, new Personnummer.Options
+            {
+                AllowCoordinationNumber = true
+            }));
+
+            Assert.Throws<PersonnummerException>(() => Personnummer.Parse(orgnr.ShortFormat, new Personnummer.Options
+            {
+                AllowCoordinationNumber = false
+            }));
+        }
     }
 }
