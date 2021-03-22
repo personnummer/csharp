@@ -11,11 +11,11 @@ jobs:
       - name: Set up dotnet.
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.100'
+          dotnet-version: '5.0'
       - name: Build
-        run: dotnet build --configuration Release Personnummer
+        run: dotnet build --configuration Release Personnummer -p:VersionPrefix=${{ github.event.release.tag_name }}
       - name: Package
-        run: dotnet pack --configuration Release Personnummer
+        run: dotnet pack --configuration Release Personnummer -p:VersionPrefix=${{ github.event.release.tag_name }}
       - name: publish Nuget
         run: dotnet nuget push Personnummer/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json
       - name: publish GH
