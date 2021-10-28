@@ -22,8 +22,8 @@ class Test
   public void TestValidation() 
   {
     Personnummer.Valid("191212121212");     // => True
-    Personnummer.Valid("12121+21212")       // => True
-    Personnummer.Valid("2012121-21212")     // => True
+    Personnummer.Valid("121212+1212")       // => True
+    Personnummer.Valid("20121212-1212")     // => True
   }
 }
 ```
