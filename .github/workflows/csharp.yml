@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '3.1.100' ]
+        dotnet: [ '5.0' ]
     name: Test dotnet ${{ matrix.dotnet-versions }}
     steps:
       - uses: actions/checkout@v2

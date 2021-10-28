@@ -90,8 +90,8 @@ namespace Personnummer
             int day = int.Parse(groups[4].Value);
             if (options.Value.AllowCoordinationNumber)
             {
-                day = day > 60 ? day - 60 : day;
-                IsCoordinationNumber = true;
+                IsCoordinationNumber = day > 60;
+                day = IsCoordinationNumber ? day - 60 : day;
             }
             else if (day > 60)
             {
@@ -109,6 +109,12 @@ namespace Personnummer
 
             IsMale = int.Parse(Numbers[2].ToString()) % 2 == 1;
             IsFemale = !IsMale;
+
+            // Try parse date-time to make sure it's actually a real date.
+            if (!DateTime.TryParse($"{FullYear}-{Month:00}-{realDay:00}", out _))
+            {
+                throw new PersonnummerException("Invalid personal identity number.");
+            }
 
             if (Luhn($"{Year}{Month}{Day}{groups[6].Value}") != int.Parse(ControlNumber))
             {
@@ -129,7 +135,7 @@ namespace Personnummer
 
         /// <summary>
         /// Parse a personal identity number - as string - into a Personnummer object.
-        /// 
+        ///
         /// In case options is not passed, they will default to accept any personal identity and coordination numbers.
         /// </summary>
         /// <param name="ssn">Personal identity number to parse.</param>
@@ -160,7 +166,7 @@ namespace Personnummer
         }
 
         #region Static internal.
-        private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-\s]?)((?!000)\d{3})(\d)$");
+        private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-]?)((?!000)\d{3})(\d)$");
 
         private static int Luhn(string value)
         {

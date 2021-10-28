@@ -15,7 +15,7 @@ namespace Personnummer.Tests
         public string LongFormat { get; set; }
         [JsonProperty("short_format")]
         public string ShortFormat { get; set; }
-        [JsonProperty("separated_format")] 
+        [JsonProperty("separated_format")]
         public string SeparatedFormat { get; set; }
         [JsonProperty("separated_long")]
         public string SeparatedLong { get; set; }
@@ -39,7 +39,43 @@ namespace Personnummer.Tests
             string result = (new StreamReader(request.GetResponse().GetResponseStream())).ReadToEnd();
             Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(result);
         }
-        
+
+        /// <inheritdoc />
+        public virtual IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => true).GetEnumerator();
+        }
+
+        protected IList<object[]> AsObject(Func<PersonnummerData, bool> filter)
+        {
+            return Data.Where<PersonnummerData>(filter).Select<PersonnummerData, object[]>(o =>
+            {
+                return new object[]
+                {
+                    o
+                };
+                ;
+            }).ToList();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    public class OrgNumberDataProvider : IEnumerable<object[]>
+    {
+        protected static List<PersonnummerData> Data { get; }
+
+        static OrgNumberDataProvider()
+        {
+            WebRequest request = WebRequest.Create("https://raw.githubusercontent.com/personnummer/meta/master/testdata/orgnumber.json");
+            string result = (new StreamReader(request.GetResponse().GetResponseStream())).ReadToEnd();
+            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(result);
+        }
+
         /// <inheritdoc />
         public virtual IEnumerator<object[]> GetEnumerator()
         {
@@ -91,7 +127,7 @@ namespace Personnummer.Tests
 
     public class InvalidCnDataProvider : CnDataProvider
     {
-        
+
         public override IEnumerator<object[]> GetEnumerator()
         {
             return AsObject(o => o.Type != "ssn" && !o.Valid).GetEnumerator();
