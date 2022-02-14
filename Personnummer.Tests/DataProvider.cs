@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
 using Newtonsoft.Json;
 
 namespace Personnummer.Tests
@@ -31,13 +30,13 @@ namespace Personnummer.Tests
 
     public class DataProvider: IEnumerable<object[]>
     {
+        protected static readonly HttpClient webClient = new HttpClient();
         protected static List<PersonnummerData> Data { get; }
 
         static DataProvider()
         {
-            WebRequest request = WebRequest.Create("https://raw.githubusercontent.com/personnummer/meta/master/testdata/list.json");
-            string result = (new StreamReader(request.GetResponse().GetResponseStream())).ReadToEnd();
-            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(result);
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/list.json").Result;
+            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
         }
 
         /// <inheritdoc />
@@ -67,13 +66,13 @@ namespace Personnummer.Tests
 
     public class OrgNumberDataProvider : IEnumerable<object[]>
     {
+        protected static readonly HttpClient webClient = new HttpClient();
         protected static List<PersonnummerData> Data { get; }
 
         static OrgNumberDataProvider()
         {
-            WebRequest request = WebRequest.Create("https://raw.githubusercontent.com/personnummer/meta/master/testdata/orgnumber.json");
-            string result = (new StreamReader(request.GetResponse().GetResponseStream())).ReadToEnd();
-            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(result);
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/orgnumber.json").Result;
+            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
         }
 
         /// <inheritdoc />
