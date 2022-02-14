@@ -12,7 +12,6 @@ namespace Personnummer
             public bool AllowCoordinationNumber { get; set; }
         }
 
-
         #region Fields and Properties
 
         private readonly int realDay;
