@@ -126,10 +126,11 @@ namespace Personnummer
         /// If longFormat is true, it will include the century (YYYYMMDD-/+XXXX)
         /// </summary>
         /// <param name="longFormat">If century should be included.</param>
+        /// <param name="ignoreSeparator">Whether the separator should be ignored.</param>
         /// <returns>Formatted personal identity number.</returns>
-        public string Format(bool longFormat = false)
+        public string Format(bool longFormat = false, bool ignoreSeparator = false)
         {
-            return $"{(longFormat ? FullYear : Year)}{Month}{Day}{Separator}{Numbers}";
+            return ignoreSeparator ? $"{(longFormat ? FullYear : Year)}{Month}{Day}{Numbers}" : $"{(longFormat ? FullYear : Year)}{Month}{Day}{Separator}{Numbers}";
         }
 
         /// <summary>
