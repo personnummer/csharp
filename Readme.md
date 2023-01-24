@@ -25,6 +25,12 @@ class Test
     Personnummer.Valid("121212+1212")       // => True
     Personnummer.Valid("20121212-1212")     // => True
   }
+
+  public void TestValidationFormat()
+  {
+    Personnummer.ValidFormat("191212121212",longFormat:true,ignoreSeparator:true);     // => True
+    Personnummer.ValidFormat("20121212-1212",longFormat:true,ignoreSeparator:false);         // => True  
+  }
 }
 ```
 
