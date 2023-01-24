@@ -142,6 +142,30 @@ namespace Personnummer.Tests
         }
     }
 
+    public class ValidFormatSsnDataProvider : SsnDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            var json = @"[{        ""integer"": 199305269996,        ""long_format"": ""199305269996"",        ""short_format"": ""9305269996"",        ""separated_format"": ""930526-9996"",        ""separated_long"": ""19930526-9996"",        ""valid"": true,        ""type"": ""ssn"",        ""isMale"": true,        ""isFemale"": false    }]";
+
+            var data = JsonConvert.DeserializeObject<List<PersonnummerData>>(json);
+
+            return data.Select(x => new object[] {x}).GetEnumerator();
+        }
+    }
+
+    public class InvalidFormatSsnDataProvider : SsnDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            var json = @"[{        ""integer"": 199305269996,        ""long_format"": ""9305269996"",        ""short_format"": ""199305269996"",        ""separated_format"": ""19930526-9996"",        ""separated_long"": ""930526-9996"",        ""valid"": true,        ""type"": ""ssn"",        ""isMale"": true,        ""isFemale"": false    }]";
+
+            var data = JsonConvert.DeserializeObject<List<PersonnummerData>>(json);
+
+            return data.Select(x => new object[] { x }).GetEnumerator();
+        }
+    }
+
     public class InvalidSsnDataProvider : SsnDataProvider
     {
         public override IEnumerator<object[]> GetEnumerator()

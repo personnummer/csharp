@@ -165,6 +165,25 @@ namespace Personnummer
             }
         }
 
+        /// <summary>
+        /// Test a personal identity number to see if it is valid or not, and also checks if passed personal identity number is according to specified format
+        /// </summary>
+        /// <param name="ssn">Personal identity number to test.</param>
+        /// <param name="longFormat">If century should be included.</param>
+        /// <param name="ignoreSeparator">Whether the separator should be ignored.</param>
+        /// <returns>True if valid format, else false.</returns>
+        public static bool ValidFormat(string ssn, bool longFormat = false, bool ignoreSeparator = false)
+        {
+            try
+            {
+                return true && Parse(ssn).Format(longFormat,ignoreSeparator) == ssn;
+            }
+            catch (PersonnummerException)
+            {
+                return false;
+            }
+        }
+
         #region Static internal.
         private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-]?)((?!000)\d{3})(\d)$");
 

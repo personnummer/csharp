@@ -242,6 +242,26 @@ namespace Personnummer.Tests
         }
 
         [Theory]
+        [ClassData(typeof(InvalidFormatSsnDataProvider))]
+        public void TestValidFailFormat(PersonnummerData ssn)
+        {
+            Assert.False(Personnummer.ValidFormat(ssn.LongFormat, true, true));
+            Assert.False(Personnummer.ValidFormat(ssn.SeparatedLong, true, false));
+            Assert.False(Personnummer.ValidFormat(ssn.SeparatedFormat, false, false));
+            Assert.False(Personnummer.ValidFormat(ssn.ShortFormat, false, true));
+        }
+
+        [Theory]
+        [ClassData(typeof(ValidFormatSsnDataProvider))]
+        public void TestValidFormat(PersonnummerData ssn)
+        {
+            Assert.True(Personnummer.ValidFormat(ssn.LongFormat, true, true));
+            Assert.True(Personnummer.ValidFormat(ssn.SeparatedLong,true,false));
+            Assert.True(Personnummer.ValidFormat(ssn.SeparatedFormat,false,false));
+            Assert.True(Personnummer.ValidFormat(ssn.ShortFormat,false,true));
+        }
+
+        [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestMaleFemale(PersonnummerData ssn)
