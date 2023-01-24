@@ -176,7 +176,7 @@ namespace Personnummer
         {
             try
             {
-                return true && Parse(ssn).Format(longFormat,ignoreSeparator) == ssn;
+                return Parse(ssn).Format(longFormat,ignoreSeparator) == ssn;
             }
             catch (PersonnummerException)
             {
