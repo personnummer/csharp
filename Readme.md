@@ -1,6 +1,7 @@
 # Personnummer
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/personnummer/csharp/csharp.yml?branch=master)](https://github.com/personnummer/csharp/actions)
+[![NuGet Downloads](https://shields.io/nuget/dt/personnummer)](https://www.nuget.org/packages/Personnummer)
 
 Validate Swedish social security numbers.
 
