@@ -314,5 +314,25 @@ namespace Personnummer.Tests
                 AllowCoordinationNumber = false
             }));
         }
+
+        [Theory]
+        [ClassData(typeof(ValidSsnDataProvider))]
+        public void TestDate(PersonnummerData data)
+        {
+            var pn = new Personnummer(data.LongFormat);
+            Assert.Equal(data.LongFormat.Substring(0, 8), $"{pn.Date.Year:0000}{pn.Date.Month:00}{pn.Date.Day:00}");
+        }
+
+        [Theory]
+        [ClassData(typeof(ValidCnDataProvider))]
+        public void TestDateCn(PersonnummerData data)
+        {
+            var expect = data.LongFormat[..4];
+            expect += data.LongFormat.Substring(4, 2);
+            expect += (int.Parse(data.LongFormat.Substring(6, 2)) - 60).ToString();
+
+            var pn = new Personnummer(data.LongFormat);
+            Assert.Equal(expect, $"{pn.Date.Year:0000}{pn.Date.Month:00}{pn.Date.Day:00}");
+        }
     }
 }
