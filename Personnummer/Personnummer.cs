@@ -14,9 +14,10 @@ namespace Personnummer
 
         #region Fields and Properties
 
-        private readonly int realDay;
+        public DateTime Date { get; private set; }
 
-        public int Age => (DateTime.Now.Year - (new DateTime(int.Parse($"{FullYear}"), int.Parse(Month), realDay, 0, 0, 0)).Year);
+        public int Age => DateTime.Now.Year - Date.Year;
+
         public string Separator => Age >= 100 ? "+" : "-";
 
         public string Century { get; }
@@ -97,7 +98,7 @@ namespace Personnummer
                 throw new PersonnummerException("Invalid personal identity number.");
             }
 
-            realDay       = day;
+            var realDay = day;
             Century       = century;
             Year          = decade;
             FullYear      = century + decade;
@@ -119,6 +120,8 @@ namespace Personnummer
             {
                 throw new PersonnummerException("Invalid personal identity number.");
             }
+
+            Date = new DateTime(int.Parse($"{FullYear}"), int.Parse(Month), realDay, 0, 0, 0);
         }
 
         /// <summary>
