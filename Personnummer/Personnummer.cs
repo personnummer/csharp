@@ -67,6 +67,14 @@ namespace Personnummer
                 throw new PersonnummerException($"Input string too {state}");
             }
 
+
+            if (options.Value.AllowInterim == false && Regex.IsMatch(ssn.Trim(), InterimTest))
+            {
+                throw new PersonnummerException(
+                    $"{ssn} contains non-integer characters and options are set to not allow interim numbers"
+                );
+            }
+
             MatchCollection matches;
             try
             {
@@ -83,16 +91,16 @@ namespace Personnummer
 
             GroupCollection groups = matches[0].Groups;
             string          century;
-            string          decade = groups[2].Value;
+            string          decade = groups["decade"].Value;
 
-            if (!string.IsNullOrEmpty(groups[1].Value))
+            if (!string.IsNullOrEmpty(groups["century"].Value))
             {
-                century = groups[1].Value;
+                century = groups["century"].Value;
             }
             else
             {
                 int born = DateTime.Now.Year - int.Parse(decade);
-                if (groups[5].Value.Length != 0 && groups[5].Value == "+")
+                if (groups["separator"].Value.Length != 0 && groups["separator"].Value == "+")
                 {
                     born -= 100;
                 }
@@ -101,7 +109,7 @@ namespace Personnummer
             }
 
             // Create date time object.
-            int day = int.Parse(groups[4].Value);
+            int day = int.Parse(groups["day"].Value);
             if (options.Value.AllowCoordinationNumber)
             {
                 IsCoordinationNumber = day > 60;
@@ -116,10 +124,10 @@ namespace Personnummer
             Century       = century;
             Year          = decade;
             FullYear      = century + decade;
-            Month         = groups[3].Value;
-            Day           = groups[4].Value;
-            Numbers       = groups[6].Value + groups[7].Value;
-            ControlNumber = groups[7].Value;
+            Month         = groups["month"].Value;
+            Day           = groups["day"].Value;
+            Numbers       = groups["numbers"].Value + groups["control"].Value;
+            ControlNumber = groups["control"].Value;
 
             IsMale = int.Parse(Numbers[2].ToString()) % 2 == 1;
             IsFemale = !IsMale;
@@ -130,7 +138,13 @@ namespace Personnummer
                 throw new PersonnummerException("Invalid personal identity number.");
             }
 
-            if (Luhn($"{Year}{Month}{Day}{groups[6].Value}") != int.Parse(ControlNumber))
+            var num = groups["numbers"].Value;
+            if (options.Value.AllowInterim)
+            {
+                 num = Regex.Replace(num, InterimTest, "1");
+            }
+
+            if (Luhn($"{Year}{Month}{Day}{num}") != int.Parse(ControlNumber))
             {
                 throw new PersonnummerException("Invalid personal identity number.");
             }
@@ -156,7 +170,7 @@ namespace Personnummer
         /// In case options is not passed, they will default to accept any personal identity and coordination numbers.
         /// </summary>
         /// <param name="ssn">Personal identity number to parse.</param>
-        /// <param name="options">Options object.</param>
+        /// <param name="options">Options to use during parsing.</param>
         /// <exception cref="PersonnummerException">On invalid personal identity number.</exception>
         /// <returns>Personal identity number as a Personnummer object.</returns>
         public static Personnummer Parse(string ssn, Options? options = null)
@@ -168,6 +182,7 @@ namespace Personnummer
         /// Test a personal identity number to see if it is valid or not.
         /// </summary>
         /// <param name="ssn">Personal identity number to test.</param>
+        /// <param name="options">Options to use during parsing.</param>
         /// <returns>True if valid, else false.</returns>
         public static bool Valid(string ssn, Options? options = null)
         {
@@ -185,7 +200,8 @@ namespace Personnummer
         }
 
         #region Static internal.
-        private static readonly Regex regex = new Regex(@"^(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\+\-]?)((?!000)\d{3})(\d)$");
+        private static readonly Regex regex = new Regex(@"^(?'century'\d{2}){0,1}(?'decade'\d{2})(?'month'\d{2})(?'day'\d{2})(?'separator'[\+\-]?)(?'numbers'((?!000)\d{3}|[TRSUWXJKLMN]\d{2}))(?'control'\d)$");
+        private const string InterimTest = "(?![-+])\\D";
 
         private static int Luhn(string value)
         {
