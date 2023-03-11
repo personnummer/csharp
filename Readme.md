@@ -67,6 +67,27 @@ using Personnummer;
 //=> false
 ```
 
+### Coordination numbers
+
+The package supports coordination numbers. This feature is enabled by default
+and can be disabled by passing an option object to the constructor, parse 
+or validate function.
+
+```csharp
+Personnummer.Parse("193405619996"); // True.
+Personnummer.Parse("193405619996", new { AllowCoordinationNumber = true }); // False.
+```
+
+### Interim / T -numbers
+
+The package supports interim (aka T) -numbers. This feature is not enabled by 
+default as they are commonly used, but can be enabled by passing an option object
+to the constructor, parse of validate function.
+
+```csharp
+Personnummer.Parse("20000101T220", new { AllowInterimNumber = true }); // True.
+```
+
 See `Personnummer.Test/PersonnummerTest.cs` for more examples.
 
 ## License

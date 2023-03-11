@@ -7,7 +7,7 @@ namespace Personnummer.Tests
     {
         private Personnummer.Options _opts = new Personnummer.Options()
         {
-            AllowInterim = true,
+            AllowInterimNumber = true,
         };
 
         [Theory]
