@@ -9,7 +9,15 @@ namespace Personnummer
     {
         public struct Options
         {
-            public bool AllowCoordinationNumber { get; set; }
+            public Options()
+            {
+                AllowInterim = false;
+                AllowCoordinationNumber = true;
+            }
+
+            public bool AllowCoordinationNumber { get; set; } = true;
+
+            public bool AllowInterim { get; set; } = false;
         }
 
         #region Fields and Properties
@@ -52,13 +60,13 @@ namespace Personnummer
         /// <param name="options">Options object.</param>
         public Personnummer(string ssn, Options? options = null)
         {
+            options ??= new Options();
             if (ssn.Length > 13 || ssn.Length < 10)
             {
                 var state = ssn.Length < 10 ? "short" : "long";
                 throw new PersonnummerException($"Input string too {state}");
             }
 
-            options ??= new Options() { AllowCoordinationNumber = true };
             MatchCollection matches;
             try
             {
@@ -161,11 +169,13 @@ namespace Personnummer
         /// </summary>
         /// <param name="ssn">Personal identity number to test.</param>
         /// <returns>True if valid, else false.</returns>
-        public static bool Valid(string ssn)
+        public static bool Valid(string ssn, Options? options = null)
         {
+            options ??= new Options();
+
             try
             {
-                Parse(ssn);
+                Parse(ssn, options);
                 return true;
             }
             catch(PersonnummerException)

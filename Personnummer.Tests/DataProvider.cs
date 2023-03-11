@@ -28,6 +28,40 @@ namespace Personnummer.Tests
         public bool IsFemale { get; set; }
     }
 
+    public class InterimDataProvider : IEnumerable<object[]>
+    {
+        protected static List<PersonnummerData> Data { get; }
+
+        static InterimDataProvider()
+        {
+            var webClient = new HttpClient();;
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/interim.json").Result;
+            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
+        }
+
+        protected IList<object[]> AsObject(Func<PersonnummerData, bool> filter)
+        {
+            return Data.Where<PersonnummerData>(filter).Select<PersonnummerData, object[]>(o =>
+            {
+                return new object[]
+                {
+                    o
+                };
+                ;
+            }).ToList();
+        }
+
+        public virtual IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => true).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
     public class DataProvider: IEnumerable<object[]>
     {
         protected static readonly HttpClient webClient = new HttpClient();
@@ -97,6 +131,22 @@ namespace Personnummer.Tests
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+    }
+
+    public class ValidInterimProvider : InterimDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => o.Valid).GetEnumerator();
+        }
+    }
+
+    public class InvalidInterimProvider : InterimDataProvider
+    {
+        public override IEnumerator<object[]> GetEnumerator()
+        {
+            return AsObject(o => !o.Valid).GetEnumerator();
         }
     }
 
