@@ -52,6 +52,12 @@ namespace Personnummer
         /// <param name="options">Options object.</param>
         public Personnummer(string ssn, Options? options = null)
         {
+            if (ssn.Length > 13 || ssn.Length < 10)
+            {
+                var state = ssn.Length < 10 ? "short" : "long";
+                throw new PersonnummerException($"Input string too {state}");
+            }
+
             options ??= new Options() { AllowCoordinationNumber = true };
             MatchCollection matches;
             try
