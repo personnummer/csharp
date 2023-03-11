@@ -11,13 +11,13 @@ namespace Personnummer
         {
             public Options()
             {
-                AllowInterim = false;
+                AllowInterimNumber = false;
                 AllowCoordinationNumber = true;
             }
 
             public bool AllowCoordinationNumber { get; set; } = true;
 
-            public bool AllowInterim { get; set; } = false;
+            public bool AllowInterimNumber { get; set; } = false;
         }
 
         #region Fields and Properties
@@ -68,7 +68,7 @@ namespace Personnummer
             }
 
 
-            if (options.Value.AllowInterim == false && Regex.IsMatch(ssn.Trim(), InterimTest))
+            if (options.Value.AllowInterimNumber == false && Regex.IsMatch(ssn.Trim(), InterimTest))
             {
                 throw new PersonnummerException(
                     $"{ssn} contains non-integer characters and options are set to not allow interim numbers"
@@ -139,7 +139,7 @@ namespace Personnummer
             }
 
             var num = groups["numbers"].Value;
-            if (options.Value.AllowInterim)
+            if (options.Value.AllowInterimNumber)
             {
                  num = Regex.Replace(num, InterimTest, "1");
             }
