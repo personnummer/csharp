@@ -329,7 +329,7 @@ namespace Personnummer.Tests
         {
             var expect = data.LongFormat[..4];
             expect += data.LongFormat.Substring(4, 2);
-            expect += (int.Parse(data.LongFormat.Substring(6, 2)) - 60).ToString();
+            expect += (int.Parse(data.LongFormat.Substring(6, 2)) - 60).ToString("00");
 
             var pn = new Personnummer(data.LongFormat);
             Assert.Equal(expect, $"{pn.Date.Year:0000}{pn.Date.Month:00}{pn.Date.Day:00}");
