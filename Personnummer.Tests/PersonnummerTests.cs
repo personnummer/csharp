@@ -268,23 +268,23 @@ namespace Personnummer.Tests
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             // Getting the separator from a short formatted none-separated person number is not actually possible if it is intended to be a +.
         }
-        
+
         [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestIgnoreSeparatorWhenFormatting(PersonnummerData ssn)
         {
             var separators = "+-".ToCharArray();
-            
+
             var ps1 = Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true });
             var ps2 = Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true });
             var ps3 = Personnummer.Parse(ssn.SeparatedFormat,
                 new Personnummer.Options { AllowCoordinationNumber = true });
-            
+
             Assert.True(ps1.Format(false, true).IndexOfAny(separators) == -1);
             Assert.True(ps2.Format(false, true).IndexOfAny(separators) == -1);
             Assert.True(ps3.Format(false, true).IndexOfAny(separators) == -1);
-            
+
             Assert.True(ps1.Format().IndexOfAny(separators) >= 0);
             Assert.True(ps2.Format().IndexOfAny(separators) >= 0);
             Assert.True(ps3.Format().IndexOfAny(separators) >= 0);
@@ -333,6 +333,30 @@ namespace Personnummer.Tests
 
             var pn = new Personnummer(data.LongFormat);
             Assert.Equal(expect, $"{pn.Date.Year:0000}{pn.Date.Month:00}{pn.Date.Day:00}");
+        }
+
+        [Fact]
+        public void TestParseTooLong()
+        {
+            Assert.Equal(
+                "Input string too long",
+                Assert.Throws<PersonnummerException>(() =>
+                {
+                    Personnummer.Parse("11111111-11111"); // 14 greater than 13.
+                }).Message
+            );
+        }
+
+        [Fact]
+        public void TestParseTooShort()
+        {
+            Assert.Equal(
+                "Input string too short",
+                Assert.Throws<PersonnummerException>(() =>
+                {
+                    Personnummer.Parse("111111111"); // 9 less than 10
+                }).Message
+            );
         }
     }
 }
