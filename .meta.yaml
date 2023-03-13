@@ -1,3 +1,4 @@
 name: "C#"
 maintainer: "@johannestegner"
 spec: "3.1"
+workflow: "csharp.yml"
