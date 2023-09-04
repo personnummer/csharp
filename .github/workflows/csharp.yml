@@ -14,7 +14,7 @@ jobs:
         dotnet: [ '6.0.x' ]
     name: Test dotnet ${{ matrix.dotnet-versions }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up dotnet.
         uses: actions/setup-dotnet@v3
         with:
