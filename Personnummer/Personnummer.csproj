@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;net47;net48;net5.0;net6.0;net7.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net5.0;net7.0;netstandard2.1;net46;net47;net48;net8.0</TargetFrameworks>
     <Company>Personnummer</Company>
     <Authors>Johannes Tegnér, Personnummer Contributors</Authors>
     <Description>Verify Swedish personal identity numbers.</Description>
@@ -12,7 +12,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicense>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicense>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>(C) Personnummer &amp; Contributors</Copyright>
     <Title>Personnummer</Title>

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '6.0.x' ]
+        dotnet: [ '8.0.x' ]
     name: Test dotnet ${{ matrix.dotnet-versions }}
     steps:
       - uses: actions/checkout@v4
