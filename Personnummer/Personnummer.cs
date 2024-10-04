@@ -24,7 +24,21 @@ namespace Personnummer
 
         public DateTime Date { get; private set; }
 
-        public int Age => DateTime.Now.Year - Date.Year;
+        public int Age
+        {
+            get
+            {
+                var now = DateTime.Now;
+                var age = now.Year - Date.Year;
+
+                if (now.Month >= Date.Month && now.Day > Date.Day)
+                {
+                    age--;
+                }
+
+                return age;
+            }
+        }
 
         public string Separator => Age >= 100 ? "+" : "-";
 
