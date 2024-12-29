@@ -103,17 +103,19 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestAgeCn(PersonnummerData ssn)
         {
+            var timeProvider = new TestTimeProvider();
+
             int day = int.Parse(ssn.LongFormat.Substring(ssn.LongFormat.Length - 6, 2)) - 60;
             string strDay = day < 10 ? $"0{day}" : day.ToString();
 
-            DateTime dt    = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 6) + strDay, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-            int      years = DateTime.Now.Year - dt.Year;
+            DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 6) + strDay, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
+            int years = timeProvider.GetLocalNow().Year - dt.Year;
 
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Age);
+            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
         }
 
 
