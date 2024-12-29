@@ -18,6 +18,15 @@ namespace Personnummer
             public bool AllowCoordinationNumber { get; set; } = true;
 
             public bool AllowInterimNumber { get; set; } = false;
+
+            /// <summary>
+            /// TimeProvider to use in calculations which are time dependent.<br/>
+            /// Uses `GetLocalNow` method.
+            /// <remarks>
+            /// Defaults to System provider.
+            /// </remarks>
+            /// </summary>
+            public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
         }
 
         #region Fields and Properties
@@ -28,7 +37,7 @@ namespace Personnummer
         {
             get
             {
-                var now = DateTime.Now;
+                var now = _options.TimeProvider.GetLocalNow();
                 var age = now.Year - Date.Year;
 
                 if (now.Month >= Date.Month && now.Day > Date.Day)
@@ -64,6 +73,8 @@ namespace Personnummer
 
         #endregion
 
+        private readonly Options _options;
+
         /// <summary>
         /// Create a new Personnummber object from a string.
         ///
@@ -74,7 +85,7 @@ namespace Personnummer
         /// <param name="options">Options object.</param>
         public Personnummer(string ssn, Options? options = null)
         {
-            options ??= new Options();
+            _options = options ?? new Options();
             if (ssn.Length > 13 || ssn.Length < 10)
             {
                 var state = ssn.Length < 10 ? "short" : "long";
@@ -82,7 +93,7 @@ namespace Personnummer
             }
 
 
-            if (options.Value.AllowInterimNumber == false && Regex.IsMatch(ssn.Trim(), InterimTest))
+            if (_options.AllowInterimNumber == false && Regex.IsMatch(ssn.Trim(), InterimTest))
             {
                 throw new PersonnummerException(
                     $"{ssn} contains non-integer characters and options are set to not allow interim numbers"
@@ -113,7 +124,7 @@ namespace Personnummer
             }
             else
             {
-                int born = DateTime.Now.Year - int.Parse(decade);
+                int born = TimeProvider.System.GetLocalNow().Year - int.Parse(decade);
                 if (groups["separator"].Value.Length != 0 && groups["separator"].Value == "+")
                 {
                     born -= 100;
@@ -124,7 +135,7 @@ namespace Personnummer
 
             // Create date time object.
             int day = int.Parse(groups["day"].Value);
-            if (options.Value.AllowCoordinationNumber)
+            if (_options.AllowCoordinationNumber)
             {
                 IsCoordinationNumber = day > 60;
                 day = IsCoordinationNumber ? day - 60 : day;
@@ -153,7 +164,7 @@ namespace Personnummer
             }
 
             var num = groups["numbers"].Value;
-            if (options.Value.AllowInterimNumber)
+            if (_options.AllowInterimNumber)
             {
                  num = Regex.Replace(num, InterimTest, "1");
             }
