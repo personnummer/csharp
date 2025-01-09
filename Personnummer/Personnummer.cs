@@ -46,7 +46,10 @@ namespace Personnummer
                 var now = _options.DateTimeNow;
                 var age = now.Year - Date.Year;
 
-                if (now.Month >= Date.Month && now.Day >= Date.Day)
+                var hadBirthdayThisYear = (now.Month > Date.Month) ||
+                                        (now.Month == Date.Month && now.Day >= Date.Day);
+
+                if (!hadBirthdayThisYear)
                 {
                     age--;
                 }
