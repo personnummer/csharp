@@ -19,6 +19,7 @@ namespace Personnummer
 
             public bool AllowInterimNumber { get; set; } = false;
 
+#if (NET8_0_OR_GREATER)
             /// <summary>
             /// TimeProvider to use in calculations which are time dependent.<br/>
             /// Uses `GetLocalNow` method.
@@ -26,7 +27,12 @@ namespace Personnummer
             /// Defaults to System provider.
             /// </remarks>
             /// </summary>
-            public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
+            public TimeProvider TimeProvider { private get; init; } = TimeProvider.System;
+
+            internal DateTimeOffset DateTimeNow => TimeProvider.GetLocalNow();
+#else
+            internal DateTimeOffset DateTimeNow => DateTimeOffset.Now;
+#endif
         }
 
         #region Fields and Properties
@@ -37,10 +43,10 @@ namespace Personnummer
         {
             get
             {
-                var now = _options.TimeProvider.GetLocalNow();
+                var now = _options.DateTimeNow;
                 var age = now.Year - Date.Year;
 
-                if (now.Month >= Date.Month && now.Day > Date.Day)
+                if (now.Month >= Date.Month && now.Day >= Date.Day)
                 {
                     age--;
                 }
@@ -124,7 +130,7 @@ namespace Personnummer
             }
             else
             {
-                int born = TimeProvider.System.GetLocalNow().Year - int.Parse(decade);
+                int born = _options.DateTimeNow.Year - int.Parse(decade);
                 if (groups["separator"].Value.Length != 0 && groups["separator"].Value == "+")
                 {
                     born -= 100;
