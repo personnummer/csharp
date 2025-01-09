@@ -236,5 +236,15 @@ namespace Personnummer.Tests
                 }).Message
             );
         }
+
+        [Fact]
+        public void TestEdgeCasesAroundBirthday()
+        {
+            var timeProvider = new TestTimeProvider(); //TestTime is 2025-10-05 
+            Assert.Equal(18, new Personnummer("20071004-3654", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Had birthday yesterday
+            Assert.Equal(18, new Personnummer("20071005-3653", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Birthday today
+            Assert.Equal(17, new Personnummer("20071006-3652", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Upcoming Birthday tomorrow
+        }
+       
     }
 }
