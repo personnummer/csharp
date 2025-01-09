@@ -105,12 +105,17 @@ namespace Personnummer.Tests
         public void TestAgeCn(PersonnummerData ssn)
         {
             var timeProvider = new TestTimeProvider();
+            var localNow = timeProvider.GetLocalNow();
 
             int day = int.Parse(ssn.LongFormat.Substring(ssn.LongFormat.Length - 6, 2)) - 60;
             string strDay = day < 10 ? $"0{day}" : day.ToString();
 
             DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 6) + strDay, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-            int years = timeProvider.GetLocalNow().Year - dt.Year;
+            var years = localNow.Year - dt.Year;
+            if (!(localNow.Month > dt.Month || (localNow.Month == dt.Month && localNow.Day >= dt.Day)))
+            {
+                years--;
+            }
 
             Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
             Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);

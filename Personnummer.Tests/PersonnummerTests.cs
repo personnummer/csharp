@@ -82,8 +82,14 @@ namespace Personnummer.Tests
         public void TestAge(PersonnummerData ssn)
         {
             var timeProvider = new TestTimeProvider();
+            var localNow = timeProvider.GetLocalNow();
             DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 4), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-            int years = timeProvider.GetLocalNow().Year - dt.Year;
+
+            var years = localNow.Year - dt.Year;
+            if (!(localNow.Month > dt.Month || (localNow.Month == dt.Month && localNow.Day >= dt.Day)))
+            {
+                years--;
+            }
 
             Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
             Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
@@ -91,6 +97,20 @@ namespace Personnummer.Tests
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
             Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
         }
+
+        [Fact]
+        public void TestEdgeCasesAroundBirthday()
+        {
+            var timeProvider = new TestTimeProvider
+            {
+                Now = DateTimeOffset.Parse("2090-01-09 12:00")
+            };
+
+            Assert.Equal(10, new Personnummer("20800108-6670", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Had birthday yesterday
+            Assert.Equal(10, new Personnummer("20800109-8287", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Birthday today
+            Assert.Equal(9, new Personnummer("20800110-8516", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Upcoming Birthday tomorrow
+        }
+
 #endif
 
         [Theory]
@@ -236,15 +256,5 @@ namespace Personnummer.Tests
                 }).Message
             );
         }
-
-        [Fact]
-        public void TestEdgeCasesAroundBirthday()
-        {
-            var timeProvider = new TestTimeProvider(); //TestTime is 2025-10-05 
-            Assert.Equal(18, new Personnummer("20071004-3654", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Had birthday yesterday
-            Assert.Equal(18, new Personnummer("20071005-3653", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Birthday today
-            Assert.Equal(17, new Personnummer("20071006-3652", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Upcoming Birthday tomorrow
-        }
-       
     }
 }
