@@ -10,7 +10,7 @@ public class TestTimeProvider : TimeProvider
     public override DateTimeOffset GetUtcNow()
     {
         return new DateTimeOffset(
-            new DateOnly(2025, 1, 1),
+            new DateOnly(2025, 10, 5),
             new TimeOnly(0,0,0, 1),
             TimeSpan.Zero
         );

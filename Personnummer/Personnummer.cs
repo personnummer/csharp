@@ -39,8 +39,11 @@ namespace Personnummer
             {
                 var now = _options.TimeProvider.GetLocalNow();
                 var age = now.Year - Date.Year;
+                
+                var hadBirthdayThisYear = (now.Month > Date.Month) ||  
+                                        (now.Month == Date.Month && now.Day >= Date.Day);
 
-                if (now.Month >= Date.Month && now.Day > Date.Day)
+                if (!hadBirthdayThisYear)
                 {
                     age--;
                 }
