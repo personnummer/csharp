@@ -9,16 +9,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet: [ '9.0.x' ]
-    name: Test dotnet ${{ matrix.dotnet-versions }}
+    name: Test dotnet
     steps:
       - uses: actions/checkout@v4
-      - name: Set up dotnet.
+      - name: Set up dotnet 7.
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: '7.0.x'
+      - name: Set up dotnet 9.
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
       - name: Build
         run: dotnet build
       - name: Run test suite
