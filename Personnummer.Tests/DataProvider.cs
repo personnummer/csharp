@@ -3,28 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Personnummer.Tests
 {
     public struct PersonnummerData
     {
         public long Integer { get; set; }
-        [JsonProperty("long_format")]
+        [JsonPropertyName ("long_format")]
         public string LongFormat { get; set; }
-        [JsonProperty("short_format")]
+        [JsonPropertyName ("short_format")]
         public string ShortFormat { get; set; }
-        [JsonProperty("separated_format")]
+        [JsonPropertyName ("separated_format")]
         public string SeparatedFormat { get; set; }
-        [JsonProperty("separated_long")]
+        [JsonPropertyName ("separated_long")]
         public string SeparatedLong { get; set; }
-        [JsonProperty("valid")]
+        [JsonPropertyName ("valid")]
         public bool Valid { get; set; }
-        [JsonProperty("type")]
+        [JsonPropertyName ("type")]
         public string Type { get; set; }
-        [JsonProperty("isMale")]
+        [JsonPropertyName ("isMale")]
         public bool IsMale { get; set; }
-        [JsonProperty("isFemale")]
+        [JsonPropertyName("isFemale")]
         public bool IsFemale { get; set; }
     }
 
@@ -36,12 +37,12 @@ namespace Personnummer.Tests
         {
             var webClient = new HttpClient();;
             var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/interim.json").Result;
-            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
+            Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
         protected IList<object[]> AsObject(Func<PersonnummerData, bool> filter)
         {
-            return Data.Where<PersonnummerData>(filter).Select<PersonnummerData, object[]>(o =>
+            return Data.Where(filter).Select(o =>
             {
                 return new object[]
                 {
@@ -64,13 +65,13 @@ namespace Personnummer.Tests
 
     public class DataProvider: IEnumerable<object[]>
     {
-        protected static readonly HttpClient webClient = new HttpClient();
+        protected static readonly HttpClient webClient = new();
         protected static List<PersonnummerData> Data { get; }
 
         static DataProvider()
         {
             var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/list.json").Result;
-            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
+            Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
         /// <inheritdoc />
@@ -81,7 +82,7 @@ namespace Personnummer.Tests
 
         protected IList<object[]> AsObject(Func<PersonnummerData, bool> filter)
         {
-            return Data.Where<PersonnummerData>(filter).Select<PersonnummerData, object[]>(o =>
+            return Data.Where(filter).Select(o =>
             {
                 return new object[]
                 {
@@ -100,13 +101,13 @@ namespace Personnummer.Tests
 
     public class OrgNumberDataProvider : IEnumerable<object[]>
     {
-        protected static readonly HttpClient webClient = new HttpClient();
+        protected static readonly HttpClient webClient = new();
         protected static List<PersonnummerData> Data { get; }
 
         static OrgNumberDataProvider()
         {
             var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/orgnumber.json").Result;
-            Data = JsonConvert.DeserializeObject<List<PersonnummerData>>(response);
+            Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
         /// <inheritdoc />
@@ -117,7 +118,7 @@ namespace Personnummer.Tests
 
         protected IList<object[]> AsObject(Func<PersonnummerData, bool> filter)
         {
-            return Data.Where<PersonnummerData>(filter).Select<PersonnummerData, object[]>(o =>
+            return Data.Where(filter).Select(o =>
             {
                 return new object[]
                 {
