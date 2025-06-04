@@ -15,8 +15,14 @@ namespace Personnummer
                 AllowCoordinationNumber = true;
             }
 
+            /// <summary>
+            /// If the parser should parse coordination numbers as valid personnummers.
+            /// </summary>
             public bool AllowCoordinationNumber { get; set; } = true;
 
+            /// <summary>
+            /// If the parser should parse interim numbers as valid personnummers.
+            /// </summary>
             public bool AllowInterimNumber { get; set; } = false;
 
 #if (NET8_0_OR_GREATER)
@@ -37,8 +43,14 @@ namespace Personnummer
 
         #region Fields and Properties
 
+        /// <summary>
+        /// Date portion of the personnummer as a DateTime object.
+        /// </summary>
         public DateTime Date { get; private set; }
 
+        /// <summary>
+        /// Age of the personnummer.
+        /// </summary>
         public int Age
         {
             get
@@ -58,26 +70,77 @@ namespace Personnummer
             }
         }
 
+        /// <summary>
+        /// Separator for the personnummer.
+        /// - for ages 0-99, + for ages 100+.
+        /// </summary>
         public string Separator => Age >= 100 ? "+" : "-";
 
+        /// <summary>
+        /// The century portion of the personnummer.
+        /// <remarks>
+        /// Observe that in some cases (when passing numbers without century hints) the century may be
+        /// miss-calculated.
+        /// </remarks>
+        /// </summary>
         public string Century { get; }
 
+        /// <summary>
+        /// The full year section of the personnummer, including the century.
+        /// </summary>
         public string FullYear { get; }
 
+        /// <summary>
+        /// The year section of the personnummer, excluding the century.
+        /// </summary>
         public string Year { get; }
 
+        /// <summary>
+        /// The month section of the personnummer.
+        /// </summary>
         public string Month { get; }
 
+        /// <summary>
+        /// The day section of the personnummer.
+        /// <remarks>
+        /// Observe that this value is not always the actual day, when using a Coordination number
+        /// this value will be the coordination number day section (i.e., <see cref="RealDay"/> + 60).
+        /// Use <see cref="RealDay"/> for a valid day portion.
+        /// </remarks>
+        /// </summary>
         public string Day { get; }
 
+        /// <summary>
+        /// The day portion of the birth date.
+        /// <remarks>
+        /// When using a coordination number, the day portion is subtracted by 60 to create a "real day".
+        /// </remarks>
+        /// </summary>
+        public string RealDay { get; }
+
+        /// <summary>
+        /// The last four numbers in the personnummer.
+        /// </summary>
         public string Numbers { get; }
 
+        /// <summary>
+        /// The control number portion of the personnummer.
+        /// </summary>
         public string ControlNumber { get; }
 
+        /// <summary>
+        /// If the personnumer is a coordiantion number or not.
+        /// </summary>
         public bool IsCoordinationNumber { get; } = false;
 
+        /// <summary>
+        /// If the personnummer is female identified.
+        /// </summary>
         public bool IsFemale { get; } = false;
 
+        /// <summary>
+        /// If the personnummer is male identified.
+        /// </summary>
         public bool IsMale { get; } = false;
 
         #endregion
@@ -85,7 +148,7 @@ namespace Personnummer
         private readonly Options _options;
 
         /// <summary>
-        /// Create a new Personnummber object from a string.
+        /// Create a new Personnummer object from a string.
         ///
         /// In case options is not passed, they will default to accept any personal and coordination numbers.
         /// </summary>
@@ -155,6 +218,8 @@ namespace Personnummer
             }
 
             var realDay = day;
+
+            RealDay       = realDay.ToString();
             Century       = century;
             Year          = decade;
             FullYear      = century + decade;

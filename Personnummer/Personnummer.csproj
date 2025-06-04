@@ -18,6 +18,7 @@
     <Title>Personnummer</Title>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <IncludeDocumentationProjectOutputGroup>true</IncludeDocumentationProjectOutputGroup>
   </PropertyGroup>
 
   <ItemGroup>
