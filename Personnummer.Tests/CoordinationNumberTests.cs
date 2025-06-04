@@ -10,6 +10,29 @@ namespace Personnummer.Tests
 
         [Theory]
         [ClassData(typeof(ValidCnDataProvider))]
+        public void TestRealDay(PersonnummerData ssn)
+        {
+            var day = int.Parse(ssn.ShortFormat.Substring(4, 2)) - 60;
+            Assert.Equal(
+                $"{day}",
+                new Personnummer(ssn.LongFormat, new Personnummer.Options() { AllowCoordinationNumber = true }).RealDay
+            );
+            Assert.Equal(
+                $"{day}",
+                new Personnummer(ssn.ShortFormat, new Personnummer.Options() { AllowCoordinationNumber = true }).RealDay
+            );
+            Assert.Equal(
+                $"{day}",
+                new Personnummer(ssn.SeparatedFormat, new Personnummer.Options() { AllowCoordinationNumber = true }).RealDay
+            );
+            Assert.Equal(
+                $"{day}",
+                new Personnummer(ssn.SeparatedLong, new Personnummer.Options() { AllowCoordinationNumber = true }).RealDay
+            );
+        }
+
+        [Theory]
+        [ClassData(typeof(ValidCnDataProvider))]
         public void TestCtrCn(PersonnummerData ssn)
         {
             Assert.IsType<Personnummer>(new Personnummer(ssn.LongFormat, new Personnummer.Options
