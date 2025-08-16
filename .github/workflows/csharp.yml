@@ -12,10 +12,10 @@ jobs:
     name: Test dotnet
     steps:
       - uses: actions/checkout@v5
-      - name: Set up dotnet 7.
+      - name: Set up dotnet 8.
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.0.x'
+          dotnet-version: '8.0.x'
       - name: Set up dotnet 9.
         uses: actions/setup-dotnet@v4
         with:
