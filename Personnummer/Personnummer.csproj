@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net8.0;net9.0;netstandard2.1;net47;net48</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;netstandard2.1;net47;net48</TargetFrameworks>
     <Company>Personnummer</Company>
     <Authors>Johannes Tegnér, Personnummer Contributors</Authors>
     <Description>Verify Swedish personal identity numbers.</Description>

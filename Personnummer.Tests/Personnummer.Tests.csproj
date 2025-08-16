@@ -6,12 +6,11 @@
 
     <LangVersion>latestmajor</LangVersion>
 
-    <TargetFrameworks>net9.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" Condition=" '$(TargetFramework)'=='net9.0' "/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" Condition=" '$(TargetFramework)'=='net7.0' "/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>
