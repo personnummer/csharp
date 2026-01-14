@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Misc/">
+    <File Path=".github/renovate.json" />
+    <File Path=".github/workflows/codeql-analysis.yml" />
+    <File Path=".github/workflows/csharp.yml" />
+    <File Path=".github/workflows/release.yml" />
+    <File Path="Readme.md" />
+  </Folder>
+  <Project Path="Personnummer.Tests/Personnummer.Tests.csproj" />
+  <Project Path="Personnummer/Personnummer.csproj" />
+</Solution>
