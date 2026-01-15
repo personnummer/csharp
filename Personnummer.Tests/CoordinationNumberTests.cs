@@ -122,13 +122,12 @@ namespace Personnummer.Tests
             }));
         }
 
-#if NET8_0_OR_GREATER
         [Theory]
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestAgeCn(PersonnummerData ssn)
         {
-            var timeProvider = new TestTimeProvider();
-            var localNow = timeProvider.GetLocalNow();
+            var clock = new TestClock();
+            var localNow = clock.GetNow();
 
             int day = int.Parse(ssn.LongFormat.Substring(ssn.LongFormat.Length - 6, 2)) - 60;
             string strDay = day < 10 ? $"0{day}" : day.ToString();
@@ -140,13 +139,12 @@ namespace Personnummer.Tests
                 years--;
             }
 
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true, Now = clock.GetNow }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true, Now = clock.GetNow }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true, Now = clock.GetNow }).Age);
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true, Now = clock.GetNow }).Age);
         }
-#endif
 
         [Theory]
         [ClassData(typeof(ValidCnDataProvider))]

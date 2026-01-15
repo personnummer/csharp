@@ -76,13 +76,12 @@ namespace Personnummer.Tests
         }
 
 
-#if NET8_0_OR_GREATER // Requires TimeProvider.
         [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestAge(PersonnummerData ssn)
         {
-            var timeProvider = new TestTimeProvider();
-            var localNow = timeProvider.GetLocalNow();
+            var clock = new TestClock();
+            var localNow = clock.GetNow();
             DateTime dt = DateTime.ParseExact(ssn.LongFormat.Substring(0, ssn.LongFormat.Length - 4), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
             var years = localNow.Year - dt.Year;
@@ -91,27 +90,25 @@ namespace Personnummer.Tests
                 years--;
             }
 
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
-            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = false, Now = clock.GetNow }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = false, Now = clock.GetNow }).Age);
+            Assert.Equal(years, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = false, Now = clock.GetNow }).Age);
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
-            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false, TimeProvider = timeProvider }).Age);
+            Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = false, Now = clock.GetNow }).Age);
         }
 
         [Fact]
         public void TestEdgeCasesAroundBirthday()
         {
-            var timeProvider = new TestTimeProvider
+            var clock = new TestClock
             {
                 Now = DateTimeOffset.Parse("2090-01-09 12:00")
             };
 
-            Assert.Equal(10, new Personnummer("20800108-6670", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Had birthday yesterday
-            Assert.Equal(10, new Personnummer("20800109-8287", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Birthday today
-            Assert.Equal(9, new Personnummer("20800110-8516", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Upcoming Birthday tomorrow
+            Assert.Equal(10, new Personnummer("20800108-6670", new Personnummer.Options() {Now = clock.GetNow} ).Age); // Had birthday yesterday
+            Assert.Equal(10, new Personnummer("20800109-8287", new Personnummer.Options() {Now = clock.GetNow} ).Age); // Birthday today
+            Assert.Equal(9, new Personnummer("20800110-8516", new Personnummer.Options() {Now = clock.GetNow} ).Age); // Upcoming Birthday tomorrow
         }
-
-#endif
 
         [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]

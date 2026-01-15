@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net48;net10.0;net8.0;net9.0</TargetFrameworks>
     <Company>Personnummer</Company>
     <Authors>Johannes Tegnér, Personnummer Contributors</Authors>
     <Description>Verify Swedish personal identity numbers.</Description>
@@ -19,6 +18,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <IncludeDocumentationProjectOutputGroup>true</IncludeDocumentationProjectOutputGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

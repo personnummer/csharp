@@ -13,6 +13,7 @@ namespace Personnummer
             {
                 AllowInterimNumber = false;
                 AllowCoordinationNumber = true;
+                Now = () => DateTimeOffset.Now;
             }
 
             /// <summary>
@@ -25,20 +26,12 @@ namespace Personnummer
             /// </summary>
             public bool AllowInterimNumber { get; set; } = false;
 
-#if (NET8_0_OR_GREATER)
             /// <summary>
-            /// TimeProvider to use in calculations which are time dependent.<br/>
-            /// Uses `GetLocalNow` method.
-            /// <remarks>
-            /// Defaults to System provider.
-            /// </remarks>
+            /// Function to get the current date and time.
             /// </summary>
-            public TimeProvider TimeProvider { private get; init; } = TimeProvider.System;
+            public Func<DateTimeOffset> Now { get; set; }
 
-            internal DateTimeOffset DateTimeNow => TimeProvider.GetLocalNow();
-#else
-            internal DateTimeOffset DateTimeNow => DateTimeOffset.Now;
-#endif
+            internal DateTimeOffset DateTimeNow => Now();
         }
 
         #region Fields and Properties
