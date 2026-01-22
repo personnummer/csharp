@@ -7,20 +7,35 @@ on:
   pull_request:
 
 jobs:
-  test:
+  test-fx:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up dotnet ${{ matrix.version }}.
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+      - name: Build
+        run: dotnet build --framework net48
+      - name: Run test suite
+        run: dotnet test --framework net48
+  test-net:
+    strategy:
+      matrix:
+        version:
+          - "8.0"
+          - "9.0"
+          - "10.0"
     runs-on: ubuntu-latest
     name: Test dotnet
     steps:
       - uses: actions/checkout@v6
-      - name: Set up dotnet 8.
+      - name: Set up dotnet ${{ matrix.version }}.
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
-      - name: Set up dotnet 10.
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '10.0.x'
+          dotnet-version: "${{ matrix.version }}.x"
       - name: Build
-        run: dotnet build
+        run: dotnet build --framework net${{ matrix.version }}
       - name: Run test suite
-        run: dotnet test
+        run: dotnet test --framework net${{ matrix.version }}
