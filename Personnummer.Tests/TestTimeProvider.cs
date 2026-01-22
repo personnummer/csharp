@@ -1,8 +1,12 @@
 ﻿using System;
 
-namespace Personnummer.Tests;
-
 #if NET8_0_OR_GREATER
+using TimeProvider = System.TimeProvider;
+#else
+using TimeProvider = Personnummer.TimeProvider;
+#endif
+
+namespace Personnummer.Tests;
 
 /// <summary>
 /// TimeProvider which always returns the same date: 2025 01 01 00:00:01 with UTC timezone on local time.
@@ -16,11 +20,5 @@ public class TestTimeProvider : TimeProvider
     );
 
     public override DateTimeOffset GetUtcNow()
-    {
-        return Now;
-    }
-
-    public override TimeZoneInfo LocalTimeZone { get; } = TimeZoneInfo.Utc;
+        => Now;
 }
-
-#endif

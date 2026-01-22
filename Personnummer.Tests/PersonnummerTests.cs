@@ -75,8 +75,6 @@ namespace Personnummer.Tests
             }));
         }
 
-
-#if NET8_0_OR_GREATER // Requires TimeProvider.
         [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestAge(PersonnummerData ssn)
@@ -110,8 +108,6 @@ namespace Personnummer.Tests
             Assert.Equal(10, new Personnummer("20800109-8287", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Birthday today
             Assert.Equal(9, new Personnummer("20800110-8516", new Personnummer.Options() {TimeProvider = timeProvider} ).Age); // Upcoming Birthday tomorrow
         }
-
-#endif
 
         [Theory]
         [ClassData(typeof(ValidSsnDataProvider))]
