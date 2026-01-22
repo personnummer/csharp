@@ -196,7 +196,7 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestSeparator(PersonnummerData ssn)
         {
-            string sep = ssn.SeparatedFormat.Contains('+') ? "+" : "-";
+            string sep = ssn.SeparatedFormat.Contains("+") ? "+" : "-";
             Assert.Equal(sep, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
@@ -227,7 +227,7 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestDateCn(PersonnummerData data)
         {
-            var expect = data.LongFormat[..4];
+            var expect = data.LongFormat.Substring(0, 4);
             expect += data.LongFormat.Substring(4, 2);
             expect += (int.Parse(data.LongFormat.Substring(6, 2)) - 60).ToString("00");
 
