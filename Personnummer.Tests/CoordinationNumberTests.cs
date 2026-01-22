@@ -122,7 +122,6 @@ namespace Personnummer.Tests
             }));
         }
 
-#if NET8_0_OR_GREATER
         [Theory]
         [ClassData(typeof(ValidCnDataProvider))]
         public void TestAgeCn(PersonnummerData ssn)
@@ -146,7 +145,6 @@ namespace Personnummer.Tests
             // Du to age not being possible to fetch from >100 year short format without separator, we aught to check this here.
             Assert.Equal(years > 99 ? years - 100 : years, Personnummer.Parse(ssn.ShortFormat, new Personnummer.Options { AllowCoordinationNumber = true, TimeProvider = timeProvider }).Age);
         }
-#endif
 
         [Theory]
         [ClassData(typeof(ValidCnDataProvider))]

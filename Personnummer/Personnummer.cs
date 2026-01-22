@@ -3,6 +3,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Personnummer.Exceptions;
 
+#if NET8_0_OR_GREATER
+using TimeProvider = System.TimeProvider;
+#else
+using TimeProvider = Personnummer.TimeProvider;
+#endif
+
 namespace Personnummer
 {
     public class Personnummer
@@ -25,7 +31,6 @@ namespace Personnummer
             /// </summary>
             public bool AllowInterimNumber { get; set; } = false;
 
-#if (NET8_0_OR_GREATER)
             /// <summary>
             /// TimeProvider to use in calculations which are time dependent.<br/>
             /// Uses `GetLocalNow` method.
@@ -33,12 +38,9 @@ namespace Personnummer
             /// Defaults to System provider.
             /// </remarks>
             /// </summary>
-            public TimeProvider TimeProvider { private get; init; } = TimeProvider.System;
+            public TimeProvider TimeProvider { private get; set; } = TimeProvider.System;
 
             internal DateTimeOffset DateTimeNow => TimeProvider.GetLocalNow();
-#else
-            internal DateTimeOffset DateTimeNow => DateTimeOffset.Now;
-#endif
         }
 
         #region Fields and Properties
