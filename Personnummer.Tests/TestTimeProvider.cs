@@ -14,8 +14,8 @@ namespace Personnummer.Tests;
 public class TestTimeProvider : TimeProvider
 {
     internal DateTimeOffset Now { get; set; } = new(
-        new DateOnly(2025, 1, 1),
-        new TimeOnly(0, 0, 0, 1),
+        2025, 1, 1,
+        0, 0, 0, 1,
         TimeSpan.Zero
     );
 

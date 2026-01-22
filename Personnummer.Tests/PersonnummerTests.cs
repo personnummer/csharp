@@ -169,7 +169,7 @@ namespace Personnummer.Tests
         [ClassData(typeof(ValidSsnDataProvider))]
         public void TestSeparator(PersonnummerData ssn)
         {
-            string sep = ssn.SeparatedFormat.Contains('+') ? "+" : "-";
+            string sep = ssn.SeparatedFormat.Contains("+") ? "+" : "-";
             Assert.Equal(sep, Personnummer.Parse(ssn.LongFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedLong, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
             Assert.Equal(sep, Personnummer.Parse(ssn.SeparatedFormat, new Personnummer.Options { AllowCoordinationNumber = true }).Separator);
