@@ -90,6 +90,10 @@ Personnummer.Parse("20000101T220", new { AllowInterimNumber = true }); // True.
 
 See `Personnummer.Test/PersonnummerTest.cs` for more examples.
 
+## In memoriam
+
+Fredrik "Frozzare" Forsmo (1991-2026) was the initiator, co-founder and a core contributor of the personnummer project. This library carries his work. He is missed.
+
 ## License
 
 ```
