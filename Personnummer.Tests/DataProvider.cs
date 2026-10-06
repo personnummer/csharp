@@ -36,7 +36,7 @@ namespace Personnummer.Tests
         static InterimDataProvider()
         {
             var webClient = new HttpClient();;
-            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/interim.json").Result;
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/HEAD/testdata/interim.json").Result;
             Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
@@ -70,7 +70,7 @@ namespace Personnummer.Tests
 
         static DataProvider()
         {
-            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/list.json").Result;
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/HEAD/testdata/list.json").Result;
             Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
@@ -106,7 +106,7 @@ namespace Personnummer.Tests
 
         static OrgNumberDataProvider()
         {
-            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/master/testdata/orgnumber.json").Result;
+            var response = webClient.GetStringAsync("https://raw.githubusercontent.com/personnummer/meta/HEAD/testdata/orgnumber.json").Result;
             Data = JsonSerializer.Deserialize<List<PersonnummerData>>(response);
         }
 
