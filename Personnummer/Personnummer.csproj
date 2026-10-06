@@ -10,7 +10,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Validation, Personal Identity numbers, Social security numbers, Swedish, Sweden, Verify</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicense>https://github.com/personnummer/csharp/blob/master/LICENSE</PackageLicense>
+    <PackageLicense>https://github.com/personnummer/csharp/blob/main/LICENSE</PackageLicense>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>latestmajor</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
