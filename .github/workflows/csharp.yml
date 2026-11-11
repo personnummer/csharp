@@ -39,3 +39,14 @@ jobs:
         run: dotnet build --framework net${{ matrix.version }}
       - name: Run test suite
         run: dotnet test --framework net${{ matrix.version }}
+
+  # Single stable check for branch protection, so the ruleset does not need
+  # to change when the matrix does.
+  tests-passed:
+    if: always()
+    needs: [test-fx, test-net]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any test job failed or was cancelled
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
