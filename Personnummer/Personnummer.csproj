@@ -38,4 +38,9 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
+  <!-- Dependencies required for older net versions and netfx. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48' Or '$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="11.0.0" />
+  </ItemGroup>
+
 </Project>
