@@ -1,11 +1,5 @@
 ﻿using System;
 
-#if NET8_0_OR_GREATER
-using TimeProvider = System.TimeProvider;
-#else
-using TimeProvider = Personnummer.TimeProvider;
-#endif
-
 namespace Personnummer.Tests;
 
 /// <summary>

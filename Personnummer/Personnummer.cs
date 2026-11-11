@@ -3,12 +3,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Personnummer.Exceptions;
 
-#if NET8_0_OR_GREATER
-using TimeProvider = System.TimeProvider;
-#else
-using TimeProvider = Personnummer.TimeProvider;
-#endif
-
 namespace Personnummer
 {
     public class Personnummer
