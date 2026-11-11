@@ -6,6 +6,8 @@ jobs:
   release:
     permissions:
       id-token: write
+      packages: write
+      contents: read
     environment: publish
     runs-on: ubuntu-latest
     name: Deploy
@@ -20,11 +22,11 @@ jobs:
       - name: Package
         run: dotnet pack --configuration Release Personnummer -p:VersionPrefix=${{ github.event.release.tag_name }}
       - name: publish GH
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/Personnummer/index.json
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/Personnummer/index.json
       - name: NuGet login
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         id: login
         with:
           user: ${{ secrets.NUGET_USER }}
       - name: publish Nuget
-        run: dotnet nuget push Personnummer/bin/Release/*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} -k -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push Personnummer/bin/Release/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
